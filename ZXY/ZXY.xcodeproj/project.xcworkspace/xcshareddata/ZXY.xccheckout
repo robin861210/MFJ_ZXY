@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>100FF23A-C0B8-4865-AE18-AA4999116A96</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ZXY</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0CBD5FD984F438C82138DCAA5F2644F97DB2F4BC</key>
+		<string>https://github.com/robin861210/MFJ_ZXY.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ZXY/ZXY.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0CBD5FD984F438C82138DCAA5F2644F97DB2F4BC</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/robin861210/MFJ_ZXY.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0CBD5FD984F438C82138DCAA5F2644F97DB2F4BC</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0CBD5FD984F438C82138DCAA5F2644F97DB2F4BC</string>
+			<key>IDESourceControlWCCName</key>
+			<string>MFJ_ZXY</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,64 @@
+//
+//  PrefixHeader.pch
+//  ZXY
+//
+//  Created by acewill on 15/6/12.
+//  Copyright (c) 2015年 MFJ_zxy. All rights reserved.
+//
+
+#ifndef ZXY_PrefixHeader_pch
+#define ZXY_PrefixHeader_pch
+
+#import "ServerURL.h"
+#import "ApiKey.h"
+#import "FilterData.h"
+#import "UserInfoUtils.h"
+#import "NetworkInterface.h"
+#import "EMobUserInfo.h"
+
+#pragma mark -
+#pragma mark 环信应用
+#import "WCAlertView.h"
+#import "TTGlobalUICommon.h"
+#import "UIViewController+HUD.h"
+#import "UIViewController+DismissKeyboard.h"
+#import "NSString+Valid.h"
+#import "EMSDKFull.h"
+
+
+//换新Demo使用
+#define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
+
+#define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
+
+#define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
+
+#define CHATVIEWBACKGROUNDCOLOR [UIColor colorWithRed:0.936 green:0.932 blue:0.907 alpha:1]
+
+
+
+
+
+
+#define ScreenHeight [[UIScreen mainScreen] bounds].size.height
+
+#define ScreenWidth [[UIScreen mainScreen] bounds].size.width
+
+#define LoadImage(imageName, imageType) [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:imageName ofType:imageType]]
+
+#define UIColorFromHex(hexValue) [UIColor colorWithRed:((float)((hexValue & 0xFF0000) >> 16))/255.0 green:((float)((hexValue & 0xFF00) >> 8))/255.0  blue:((float)(hexValue & 0xFF))/255.0 alpha:1.0]
+
+#define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#define SuppressPerformSelectorLeakWarning(Stuff) \
+do { \
+_Pragma("clang diagnostic push") \
+_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
+Stuff; \
+_Pragma("clang diagnostic pop") \
+} while (0)
+
+#endif
