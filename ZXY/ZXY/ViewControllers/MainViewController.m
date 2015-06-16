@@ -43,6 +43,10 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
+#pragma mark - 
+#pragma mark 页面切换
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(push:) name:@"pushToFunctionVC" object:nil];
+    
 #pragma mark -
 #pragma mark 换新功能
     /*** MFJ 环信功能 ***/
@@ -597,7 +601,7 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
 {
     [[EaseMob sharedInstance].chatManager asyncLogoffWithUnbindDeviceToken:NO completion:^(NSDictionary *info, EMError *error) {
         //发送”注销“请求
-        //[self sendLogOutNetWorkRequest];
+        //通知“注销”
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"loginAtOtherDevice", @"your login account has been in other places") delegate:self cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         alertView.tag = 100;
         [alertView show];

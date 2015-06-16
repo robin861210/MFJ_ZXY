@@ -390,7 +390,11 @@
     pickerVc.status = PickerViewShowStatusCameraRoll;
     pickerVc.pickerArray = self.cameraArray;
     pickerVc.delegate = self;
-    [pickerVc show];
+//    [pickerVc show];
+    
+    //2015、06、14  ylb  show方法不好用，可能由于rootvc的缘故，改为下面的方法
+    [self.currentViewController presentViewController:pickerVc animated:YES completion:nil];
+    
 //    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
 //    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
 //    picker.delegate = self;
