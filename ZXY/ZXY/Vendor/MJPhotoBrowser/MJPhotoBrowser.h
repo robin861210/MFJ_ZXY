@@ -5,7 +5,7 @@
 //  Copyright (c) 2013年 itcast. All rights reserved.
 
 #import <UIKit/UIKit.h>
-#import "CustomNavigationController.h"
+//#import "CustomNavigationController.h"
 
 @protocol MJPhotoBrowserDelegate;
 

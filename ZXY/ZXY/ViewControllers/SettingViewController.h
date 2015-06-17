@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIImageView+WebCache.h"
-#import "MJPhotoBrowser.h"
-#import "MJPhoto.h"
+#import "AppDelegate.h"
 
-@interface SettingViewController : UIViewController
+@interface SettingViewController : UIViewController <UIAlertViewDelegate>
 {
-    UIScrollView *bgScrollView;
-    NSMutableArray *roomListArr;        //列表
+    NSArray *settingArray;
+    
+    MRProgressOverlayView *progressView;
+    NetworkInterface *interface;
 }
 
 @end

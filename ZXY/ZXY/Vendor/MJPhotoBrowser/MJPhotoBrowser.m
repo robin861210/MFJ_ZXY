@@ -37,6 +37,11 @@
 {
     [super viewDidLoad];
     
+    //iOS7之后UIScorllView偏移
+    if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+    
     self.view.backgroundColor = [UIColor blackColor];
     
     // 1.创建UIScrollView
@@ -108,12 +113,16 @@
     
 }
 
-//提交申请
-- (void)submitApplication:(id)sender
-{
-    NSLog(@"提交申请，样板间id:%@",self.mRoomId);
-    NSLog(@"%@",self.mRoomDic);
-}
+////提交申请
+//- (void)submitApplication:(id)sender
+//{
+//    NSLog(@"提交申请，样板间id:%@",self.mRoomId);
+//    NSLog(@"%@",self.mRoomDic);
+//    SubmitAppliViewController *submitAppVC = [[SubmitAppliViewController alloc] init];
+//    submitAppVC.SubmitFlag = 1;
+//    [submitAppVC setTitle:@"申请免费设计"];
+//    [self.navigationController pushViewController:submitAppVC animated:YES];
+//}
 
 - (void)show
 {
@@ -398,9 +407,7 @@
 - (void)shareBtn:(id)sender
 {
     NSLog(@"~~~~~~~~  分享   ~~~~~~~~");
-    
 }
-
 - (UIImage *)loadWebImage:(NSString *)imageUrlPath
 {
     UIImage* image=nil;
