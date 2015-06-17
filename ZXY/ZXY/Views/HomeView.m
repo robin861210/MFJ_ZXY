@@ -16,9 +16,18 @@
     if (self) {
         // Initialization code
         [self setBackgroundColor:[UIColor whiteColor]];
+        
+        homeScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        [homeScrollView setBackgroundColor:[UIColor whiteColor]];
+        [homeScrollView setShowsHorizontalScrollIndicator:NO];
+        [homeScrollView setShowsVerticalScrollIndicator:NO];
+        [homeScrollView setDelegate:self];
+        [self addSubview:homeScrollView];
+        
 
         [self creatADView];
         [self updateHomeViewData];
+        
         
         //初始化AFNetwork
 //        progressView = [[MRProgressOverlayView alloc] init];
@@ -31,7 +40,10 @@
 }
 
 #pragma mark -
-#pragma mark Crear ADView and Delegate
+#pragma mark ScrollView Cell Type
+
+#pragma mark -
+#pragma mark 广告类型_模板
 - (void) creatADView
 {
     adView = [[ADCustomView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth,125*ScreenHeight/568)];
@@ -61,6 +73,73 @@
     }
     [adView refreshImage:AD_InfoArray placeHolderImage:@"placeholder@2x"];
 }
+
+#pragma mark -
+#pragma mark 设计图_类型
+- (void)createPlanPicType {
+    
+}
+
+#pragma mark -
+#pragma mark 知识库_类型
+- (void)createKnowledgeType {
+    
+}
+
+#pragma mark -
+#pragma mark 提醒_类型
+- (void)createWarnType {
+    
+}
+
+#pragma mark -
+#pragma mark 水电改造_类型
+- (void)createWaterAndElectricity_Remould {
+    
+}
+
+#pragma mark -
+#pragma mark 瓦工改造_类型
+- (void)createBrick_Remould {
+    
+}
+
+#pragma mark -
+#pragma mark 木工改造_类型
+- (void)createCarpenter_Remould {
+    
+}
+
+#pragma mark - 
+#pragma mark 油工改造_类型
+- (void)createPainter_Remould {
+    
+}
+
+#pragma mark -
+#pragma mark 装修日记_类型
+- (void)createDiary_Remould {
+    
+}
+
+#pragma mark -
+#pragma mark 看装修_类型
+- (void)createLookZX_Remould {
+    
+}
+
+#pragma mark -
+#pragma mark 成品安装_类型
+- (void)createProductErect_Remould {
+    
+}
+
+#pragma mark -
+#pragma mark 工程竣工_类型
+- (void)createProjectCompleted_Remould {
+    
+}
+
 
 
 

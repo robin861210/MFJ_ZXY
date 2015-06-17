@@ -17,8 +17,9 @@
 
 @end
 
-@interface HomeView : UIView <ADCustomViewDelegate>
+@interface HomeView : UIView <ADCustomViewDelegate,UIScrollViewDelegate>
 {
+    UIScrollView *homeScrollView;
     ADCustomView *adView;
     float viewHeight;
     NSArray *funTitleArray,*funImgArray;
