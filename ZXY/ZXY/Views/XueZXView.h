@@ -7,7 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ADCustomView.h"
+#import "ADDataBean.h"
+#import "CLLRefreshHeadController.h"
 
-@interface XueZXView : UIView
+@interface XueZXView : UIView<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,CLLRefreshHeadControllerDelegate,ADCustomViewDelegate>
+{
+    ADCustomView *adView;
+    float viewWidth, viewHeight;
+    UITableView *BD_tableView;
+    UISearchBar *customSearchBar;
+    
+    MRProgressOverlayView *progressView;
+    NetworkInterface *interface;
+}
+
+@property (nonatomic, assign)NSInteger selectType;
+@property (nonatomic, strong)NSArray *tableDataArray;
+@property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
+
+- (void)updataTableViewData:(NSArray *)InfoArray;
 
 @end
