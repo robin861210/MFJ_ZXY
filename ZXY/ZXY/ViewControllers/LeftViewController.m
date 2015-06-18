@@ -10,6 +10,7 @@
 #import "CameraImage.h"
 #import "DDMenuController.h"
 #import "DecorateArchivesViewController.h"
+#import "CalculatorViewController.h"
 #import "ComplaintViewController.h"
 #import "SettingViewController.h"
 
@@ -163,6 +164,11 @@
             break;
         case 2:
             NSLog(@"装修计算器");
+        {
+            CalculatorViewController *calculatorVC = [[CalculatorViewController alloc] init];
+            [calculatorVC setTitle:@"装修计算器"];
+            viewController = calculatorVC;
+        }
             break;
         case 3:
             NSLog(@"优惠活动");
