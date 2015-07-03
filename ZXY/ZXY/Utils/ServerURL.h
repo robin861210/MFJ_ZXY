@@ -83,4 +83,7 @@
 #define UpdateWorkPic       @"UpdateWorkPic"              //上传工地照片
 //UpdateWorkPic?Lat=38.76623&Lon=116.43213&LocaDesc=铁西区建设大路&MachineID=aabbcc&UserID=13112344321&ClientID=1234&UserNick=张三&ProjectID=1234&PicTitle=木工施工&Pic=aaa.jpg&Desc=木工正在施工&FlowOrder=320600&ButtonID=2013&ButtonName=木工施工&RoomType=0&RoomName=客厅&WorkerScoreQuality=3&WorkerScoreTime=4&WorkerScoreAttitude=5
 
+
+//*******************************************************//
+
 #endif

@@ -65,15 +65,15 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
     _contactsVC = [[ContactsViewController alloc] initWithNibName:nil bundle:nil];
 
     //联系人按钮
-    UIButton *contactsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
-    [contactsButton setTitle:@"联系人" forState:UIControlStateNormal];
-    [contactsButton.titleLabel setFont:[UIFont systemFontOfSize:15.0f]];
-    [contactsButton addTarget:self action:@selector(enterContactsVC:) forControlEvents:UIControlEventTouchUpInside];
-    contactsItem = [[UIBarButtonItem alloc] initWithCustomView:contactsButton];
-    if ([[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"InvCode"] length] == 0)
-    {
-        self.navigationItem.rightBarButtonItem = contactsItem;
-    }
+//    UIButton *contactsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
+//    [contactsButton setTitle:@"联系人" forState:UIControlStateNormal];
+//    [contactsButton.titleLabel setFont:[UIFont systemFontOfSize:15.0f]];
+//    [contactsButton addTarget:self action:@selector(enterContactsVC:) forControlEvents:UIControlEventTouchUpInside];
+//    contactsItem = [[UIBarButtonItem alloc] initWithCustomView:contactsButton];
+//    if ([[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"InvCode"] length] == 0)
+//    {
+//        self.navigationItem.rightBarButtonItem = contactsItem;
+//    }
     //统计未读取信息数量
     [self setupUnreadMessageCount];
     //统计未添加的联系人数量
@@ -85,6 +85,8 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
     [self.view addSubview:tmpView];
     
     CGRect subViewFrame = CGRectMake(0, 0, ScreenWidth, ScreenHeight-50-64*ScreenHeight/568);
+    NSLog(@"~~~ 在MainViewController界面中设置的界面高度:%f /n ~~~",subViewFrame.size.height);
+    
     //首页
     homeView = [[HomeView alloc] initWithFrame:subViewFrame];
     [homeView setDelegate:self];
@@ -102,14 +104,23 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
     
     //初始化下方工具栏
     tabArray = @[@"首页",@"看装修",@"在线沟通",@"学装修"];
-    NSArray *tabImgNorArray = @[@"home@2x",@"k_zx@2x",@"tack@2x",@"x_zx@2x"];
-    NSArray *tabImgSelArray = @[@"homeed@2x",@"k_zxed@2x",@"tacked@2x",@"x_zxed@2x"];
+    NSArray *tabImgNorArray = @[@"zxy_home@2x",@"zxy_look@2x",@"zxy_chat@2x",@"zxy_study@2x"];
+    NSArray *tabImgSelArray = @[@"zxy_homeed@2x",@"zxy_looked@2x",@"zxy_chated@2x",@"zxy_studyed@2x"];
     tabBarView = [[TabBarView alloc] initWithFrame:CGRectMake(0, ScreenHeight-50-64*ScreenHeight/568, ScreenWidth, 50*ScreenHeight/568) tabBarInfo:tabArray normalImageArr:tabImgNorArray selectImageArr:tabImgSelArray];
-    tabBarView.layer.borderWidth = 0.5f;
-    tabBarView.layer.borderColor = [[UIColor grayColor] CGColor];
+//    tabBarView.layer.borderWidth = 0.5f;
+//    tabBarView.layer.borderColor = [[UIColor grayColor] CGColor];
     [tabBarView setBackgroundColor:[UIColor whiteColor]];
     tabBarView.delegate = self;
     [self.view addSubview:tabBarView];
+    
+    
+    segmentView = [[CustomSegmentView alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+    segmentView.delegate = self;
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [segmentView setSegmentReset];
 }
 
 #pragma mark -
@@ -118,32 +129,24 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
 {
     NSInteger index = itemIndex.intValue - 10;
     [self cleanTmpViewSubviews];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:logOutBtn];
+    self.navigationItem.titleView = segmentView;
     
     switch (index) {
         case 0:
             [tmpView addSubview:homeView];
-//            [logOutBtn setHidden:YES];
+            self.navigationItem.titleView = nil;
             break;
         case 1:
             [tmpView addSubview:kanZXView];
-//            [activityView updateViewInfo:0 Num:0];
-//            [logOutBtn setHidden:YES];
+            [segmentView setSegmentSelectImgStrArray:@[@"zxy_choiceed@2x",@"zxy_overAlled@2x"] NormailImgStrArray:@[@"zxy_choice@2x",@"zxy_overAll@2x"] SegmentType:(int)index];
             break;
         case 2:
             [tmpView addSubview:chatListView];
-//            if ([[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"InvCode"] length] == 0) {
-//                [logOutBtn setHidden:NO];
-                self.navigationItem.rightBarButtonItem = contactsItem;
-//            }else
-//            {
-//                [logOutBtn setHidden:YES];
-//            }
+            [segmentView setSegmentSelectImgStrArray:@[@"zxy_Seg_chated@2x",@"zxy_Seg_contacted@2x"] NormailImgStrArray:@[@"zxy_Seg_chat@2x",@"zxy_Seg_contact@2x"] SegmentType:(int)index];
             break;
         case 3:
             [tmpView addSubview:xueZXView];
-//            [progressSearchView setProgressBaseInfo];
-//            [logOutBtn setHidden:YES];
+            [segmentView setSegmentSelectImgStrArray:@[@"zxy_learned@2x",@"zxy_diaryed@2x"] NormailImgStrArray:@[@"zxy_learn@2x",@"zxy_diary@2x"] SegmentType:(int)index];
             break;
         default:
             break;
@@ -157,6 +160,31 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
 {
     for (int i = 0; i < [[tmpView subviews] count]; i++) {
         [[[tmpView subviews] objectAtIndex:i] removeFromSuperview];
+    }
+}
+
+#pragma mark -
+#pragma mark CustomSegmentView Delegate
+- (void)segmentSelectItem:(int)selectTag SegmentType:(int)segmentType
+{
+    NSLog(@"~~~selectTag:%d~~~segmentType:%d~~~",selectTag,segmentType);
+    switch (segmentType) {
+        case 1:
+            [kanZXView transfromKanZX_Info:selectTag];
+            
+            break;
+        case 2:
+            if (selectTag == 35) {
+                [self enterContactsVC:nil];
+            }
+            
+            break;
+        case 3:
+            [xueZXView transfromXueZX_Info:selectTag];
+            
+            break;
+        default:
+            break;
     }
 }
 

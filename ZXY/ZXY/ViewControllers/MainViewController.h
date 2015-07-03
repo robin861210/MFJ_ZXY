@@ -12,8 +12,9 @@
 #import "KanZXView.h"
 #import "XueZXView.h"
 #import "ChatListView.h"
+#import "CustomSegmentView.h"
 
-@interface MainViewController : UIViewController<TabBarViewDelegate,HomeDelegate>
+@interface MainViewController : UIViewController<TabBarViewDelegate,HomeDelegate,CustomSegmentViewDelegate>
 {
     UIView *tmpView;
     TabBarView *tabBarView;
@@ -22,6 +23,7 @@
     HomeView *homeView;
     KanZXView *kanZXView;
     XueZXView *xueZXView;
+    CustomSegmentView *segmentView;
     
     NSInteger switchIndex;
     

@@ -15,6 +15,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        UIView *lineV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 0.5)];
+        [lineV setBackgroundColor:[UIColor grayColor]];
+        [self addSubview:lineV];
         
         self.numLab = [[UILabel alloc] init];
         

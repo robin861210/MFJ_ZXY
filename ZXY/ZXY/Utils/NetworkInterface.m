@@ -59,7 +59,7 @@
         
         getUrl = [getUrl stringByAppendingString:[NSString stringWithFormat:@"VerNum=%@&Src=%@&Channels=%@",@"1.0",@"0",@"1"]];
         
-//        getUrl = [getUrl stringByAppendingString:[NSString stringWithFormat:@"&Lat=%@&Lon=%@&LocaDesc=%@",[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"Lat"],[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"Lon"],[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"LocaDesc"]]];
+        getUrl = [getUrl stringByAppendingString:[NSString stringWithFormat:@"&Lat=%@&Lon=%@&LocaDesc=%@",[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"Lat"],[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"Lon"],[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"LocaDesc"]]];
         NSLog(@"~~~ getUrl :%@ ~~~",getUrl);
 //        getUrl = [getUrl substringToIndex:getUrl.length-1];
         [networkData startGet:getUrl tag:0];

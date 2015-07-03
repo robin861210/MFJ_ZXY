@@ -20,6 +20,8 @@
     
     MRProgressOverlayView *progressView;
     NetworkInterface *interface;
+    
+    int cellType;
 }
 
 @property (nonatomic, assign)NSInteger selectType;
@@ -27,5 +29,7 @@
 @property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
 
 - (void)updataTableViewData:(NSArray *)InfoArray;
+
+- (void)transfromXueZX_Info:(int)typeNum;
 
 @end

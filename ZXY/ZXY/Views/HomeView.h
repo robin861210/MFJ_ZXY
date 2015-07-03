@@ -24,7 +24,7 @@
     float viewHeight;
     NSArray *funTitleArray,*funImgArray;
 //    
-//    MRProgressOverlayView *progressView;
+    MRProgressOverlayView *progressView;
 //    NetworkInterface *interface;
     
     UIButton *introductionBtn,*productBtn,*serviceBtn;

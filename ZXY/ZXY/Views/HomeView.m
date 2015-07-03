@@ -29,11 +29,10 @@
         [self updateHomeViewData];
         
         
+        progressView = [[MRProgressOverlayView alloc] init];
+        progressView.mode = MRProgressOverlayViewModeIndeterminateSmall;
+        [self addSubview:progressView];
         //初始化AFNetwork
-//        progressView = [[MRProgressOverlayView alloc] init];
-//        progressView.mode = MRProgressOverlayViewModeIndeterminateSmall;
-//        [self addSubview:progressView];
-//        
 //        interface = [[NetworkInterface alloc] initWithTarget:self didFinish:@selector(homeNetworkResult:)];
     }
     return self;
@@ -140,7 +139,25 @@
     
 }
 
-
-
+#pragma mark -
+#pragma mark ProgressView Delegate
+- (void)showProgressView {
+    [progressView removeFromSuperview];
+    progressView = [[MRProgressOverlayView alloc] init];
+    progressView.mode = MRProgressOverlayViewModeIndeterminateSmall;
+    [self addSubview:progressView];
+    
+    [progressView show:YES];
+}
+- (void)dismissProgressView:(NSString *)titleStr {
+    if (titleStr.length > 0) {
+        [progressView setTitleLabelText:titleStr];
+        [progressView performBlock:^{
+            [progressView dismiss:YES];
+        }afterDelay:0.8f];
+    }else {
+        [progressView dismiss:YES];
+    }
+}
 
 @end

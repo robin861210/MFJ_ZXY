@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KanZXTableViewCell.h"
 
-@interface KanZXView : UIView
+@interface KanZXView : UIView<UITableViewDataSource,UITableViewDelegate>
+{
+    UITableView *kanZX_TableV;
+    NSMutableArray *tableViewArray;
+    
+    int dataInfoType;
+}
+
+- (void)transfromKanZX_Info:(int)typeNum;
 
 @end
