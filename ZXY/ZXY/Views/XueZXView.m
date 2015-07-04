@@ -45,6 +45,7 @@
         [self addSubview:BD_tableView];
         cellType = 33;
         
+        interface = [[NetworkInterface alloc] initWithTarget:self didFinish:@selector(NetworkResult:)];
         [self creatADView];
         [self updateAD_Data];
         [self createOtherWidget];
@@ -94,7 +95,6 @@
 {
     //添加上提加载、下拉更多
     self.refreshControll = [[CLLRefreshHeadController alloc] initWithScrollView:BD_tableView viewDelegate:self];
-    interface = [[NetworkInterface alloc] initWithTarget:self didFinish:@selector(NetworkResult:)];
 }
 /*
 //添加搜索按钮
@@ -129,8 +129,7 @@
 #pragma makr UITableView Delegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return [self.tableDataArray count];
-    return 5;
+    return [self.tableDataArray count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,10 +152,10 @@
         [cell setZXRJ_CellDisplay:YES];
         [cell setZSK_CellDisplay:NO];
 
-        [cell setCellImageView:@"http://img3.3lian.com/2013/v9/96/82.jpg"];
-        [cell setCellTitleInfo:@"装修的十大风水必信"];
-        [cell setCellHotReadType:NO];
-        [cell setCellTimeInfo:@"2015-06-30"];
+        [cell setCellImageView:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBIcon"]];
+        [cell setCellTitleInfo:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBTitle"]];
+        [cell setCellHotReadType:![[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"isHot"]];
+        [cell setCellTimeInfo:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBDateTime"]];
 
     }else if (cellType == 35) {
         [cell setZSK_CellDisplay:YES];
@@ -272,6 +271,34 @@
 
 #pragma mark -
 #pragma mark NetworkInterface Delegate
+- (void)sendXueZX_ZSK_NetworkInfoData:(NSString *)urlStr {
+    [self showProgressView];
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    [postData setValue:@"0" forKey:@"NodeID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ProjectID"] forKey:@"ProjectID"];
+    [interface setInterfaceDidFinish:@selector(ZSK_NetworkResult:)];
+    [interface sendRequest:urlStr Parameters:postData Type:get_request];
+}
+
+- (void)ZSK_NetworkResult:(NSDictionary *)result
+{
+    if ([[result objectForKey:@"Code"] intValue] == 0 &&
+        [[result objectForKey:@"Msg"] length] == 7)
+    {
+        [self dismissProgressView:nil];
+        NSLog(@"XueZXView.m Line:291行 ZSK_NetworkResult:/n %@",result);
+        NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:        [FilterData filterNerworkData:[result objectForKey:@"Response"]]];
+        [self updataTableViewData:dataArray];
+    }else {
+        NSLog(@"XueZXView.m Line:296行 ZSK_NetworkResult ErrorMsg :/n %@ ~~~",[result objectForKey:@"Msg"]);
+        [self dismissProgressView:[result objectForKey:@"Msg"]];
+    }
+}
+
 - (void)NetworkResult:(NSDictionary *)result {
     if ([[result objectForKey:@"Code"] intValue] == 0 &&
         [[result objectForKey:@"Msg"] length] ==7)

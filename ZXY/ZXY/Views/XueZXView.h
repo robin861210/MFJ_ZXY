@@ -28,6 +28,8 @@
 @property (nonatomic, strong)NSArray *tableDataArray;
 @property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
 
+- (void)sendXueZX_ZSK_NetworkInfoData:(NSString *)postInfoData;
+
 - (void)updataTableViewData:(NSArray *)InfoArray;
 
 - (void)transfromXueZX_Info:(int)typeNum;

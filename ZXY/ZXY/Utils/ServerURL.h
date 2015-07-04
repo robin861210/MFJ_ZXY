@@ -9,7 +9,7 @@
 #ifndef ZXYY_ServerURL_h
 #define ZXYY_ServerURL_h
 
-#define BaseURL     @"http://218.25.17.238:8017/"
+#define BaseURL     @"http://218.25.17.238:8021/"
 
 #define UserLogin           @"UserLogin"                    //用户登陆
 ///UserLogin?Lat=38.76623&Lon=116.43213&LocaDesc=辽宁省沈阳市中山路15号3-5-3&MachineID=aabbcc&UserName=13112344321&PassWD=Aa1234
@@ -85,5 +85,16 @@
 
 
 //*******************************************************//
+#define GetSynthesizeHomePage   @"GetSynthesizeHomePage"    //获取首页综合信息接口
+
+#define GetKBListInLearnDec     @"GetKBListInLearnDec"      //学装修模块-获取只是库文章列表
+//GetKBListInLearnDec?MachineID=aabbcc&UserID=13112344321&ClientID=1234&sessionid=1234567&Lon=123&Lat=123&Locadesc=辽宁省沈阳市&VerNum=2.4&Src=0&Channcels=0
+
+
+
+
+
+
+
 
 #endif

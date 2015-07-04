@@ -317,7 +317,11 @@ Class object_getClass(id object);
             case -1004:
                 [dicMsg setValue:@"-1004" forKey:@"Code"];
                 [dicMsg setValue:@"未能连接到服务器" forKey:@"Msg"];
-            
+                break;
+            case -1011:
+                [dicMsg setValue:@"-1011" forKey:@"Code"];
+                [dicMsg setValue:@"请求失败，Not found (404)" forKey:@"Msg"];
+                break;
             default:
                 break;
         }

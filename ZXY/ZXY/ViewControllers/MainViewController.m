@@ -147,6 +147,8 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
         case 3:
             [tmpView addSubview:xueZXView];
             [segmentView setSegmentSelectImgStrArray:@[@"zxy_learned@2x",@"zxy_diaryed@2x"] NormailImgStrArray:@[@"zxy_learn@2x",@"zxy_diary@2x"] SegmentType:(int)index];
+//            [xueZXView sendXueZX_ZSK_NetworkInfoData:GetKBListInLearnDec];
+            [xueZXView sendXueZX_ZSK_NetworkInfoData:GetSynthesizeHomePage];
             break;
         default:
             break;
