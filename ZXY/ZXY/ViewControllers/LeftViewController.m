@@ -10,7 +10,9 @@
 #import "CameraImage.h"
 #import "DDMenuController.h"
 #import "DecorateArchivesViewController.h"
+#import "DiaryViewController.h"
 #import "CalculatorViewController.h"
+#import "ActivityViewController.h"
 #import "ComplaintViewController.h"
 #import "SettingViewController.h"
 
@@ -161,6 +163,13 @@
             break;
         case 1:
             NSLog(@"装修日记");
+        {
+            DiaryViewController *diaryVC = [[DiaryViewController alloc] init];
+            [diaryVC setTitle:@"装修日记"];
+            viewController = diaryVC;
+            
+            //发送请求“装修日记”接口
+        }
             break;
         case 2:
             NSLog(@"装修计算器");
@@ -172,6 +181,11 @@
             break;
         case 3:
             NSLog(@"优惠活动");
+        {
+            ActivityViewController *activityVC = [[ActivityViewController alloc] init];
+            [activityVC setTitle:@""];
+            viewController = activityVC;
+        }
             break;
         case 4:
             NSLog(@"积分商城");
@@ -414,6 +428,47 @@
         [self dismissProgressView:[updateHeadResult objectForKey:@"Msg"]];
     }
 }
+
+//发送 请求历史日记列表
+- (void)sendGetDecDiaryNetWorkRequest
+{
+    [self showProgressView];
+    //GetDecDiary?MachineID=aabbcc&UserID=13112344321&ClientID=1234&sessionid=1234567&Lon=123&Lat=123&Locadesc=辽宁省沈阳市&VerNum=2.4&Src=0&Channels=0
+    
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    //    [postData setObject:@"" forKey:@"Lon"];
+    //    [postData setObject:@"" forKey:@"Lat"];
+    //    [postData setObject:@"" forKey:@"Locadesc"];
+    
+    [interface setInterfaceDidFinish:@selector(decDiaryNetworkResult:)];
+    [interface sendRequest:GetDecDiary Parameters:postData Type:get_request];
+    
+}
+
+#pragma mark--
+#pragma NetWorkResult
+- (void)decDiaryNetworkResult:(NSDictionary *)diaryResult
+{
+    if ([[diaryResult objectForKey:@"Code"] intValue] == 0 &&
+        [[diaryResult objectForKey:@"Msg"] length] == 7)
+    {
+        [self dismissProgressView:nil];
+        NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:[FilterData filterNerworkData:[diaryResult objectForKey:@"Response"]]];
+        NSLog(@"~~~ dataArray:%@ ~~~",dataArray);
+        
+        
+    }else {
+        NSLog(@"~~~ Error Msg :%@ ~~~",[diaryResult objectForKey:@"Msg"]);
+        [self dismissProgressView:[diaryResult objectForKey:@"Msg"]];
+    }
+    
+}
+
+
 
 
 

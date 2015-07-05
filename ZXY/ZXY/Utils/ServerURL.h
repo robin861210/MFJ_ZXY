@@ -89,7 +89,11 @@
 
 #define GetKBListInLearnDec     @"GetKBListInLearnDec"      //学装修模块-获取只是库文章列表
 //GetKBListInLearnDec?MachineID=aabbcc&UserID=13112344321&ClientID=1234&sessionid=1234567&Lon=123&Lat=123&Locadesc=辽宁省沈阳市&VerNum=2.4&Src=0&Channcels=0
+#define GetDecBudget        @"GetDecBudget"                 //装修预算接口
+//GetDecBudget?Area=100&RoomType=小户型&RoomCount=一室一厅一卫&DecRank=经济实惠&RoomSytle=简约型&RoomLocal=沈阳&MachineID=aabbcc&UserID=13112344321&ClientID=1234&sessionid=1234567&Lon=123&Lat=123&Locadesc=辽宁省沈阳市&VerNum=2.4&Src=0&Channels=0
 
+#define GetDecDiary          @"GetDecDiary"                 //装修日记列表
+//GetDecDiaryOfPrivate? DecDiaryID=1234&MachineID=aabbcc&UserID=13112344321&ClientID=1234&sessionid=1234567&Lon=123&Lat=123&Locadesc=辽宁省沈阳市&VerNum=2.4&Src=0&Channels=0
 
 
 
