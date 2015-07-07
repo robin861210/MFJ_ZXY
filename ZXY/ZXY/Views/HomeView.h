@@ -10,6 +10,8 @@
 #import "ADCustomView.h"
 #import "ADDataBean.h"
 #import "UIButton+WebCache.h"
+#import "CLLRefreshHeadController.h"
+#import "HomeViewTableViewCell.h"
 
 @protocol HomeDelegate <NSObject>
 
@@ -17,21 +19,24 @@
 
 @end
 
-@interface HomeView : UIView <ADCustomViewDelegate,UIScrollViewDelegate>
+@interface HomeView : UIView <ADCustomViewDelegate,UITableViewDataSource,UITableViewDelegate,CLLRefreshHeadControllerDelegate>
 {
-    UIScrollView *homeScrollView;
+    UITableView *homeTableView;
+    NSMutableArray *homeTableDataArray;
     ADCustomView *adView;
     float viewHeight;
     NSArray *funTitleArray,*funImgArray;
     
     MRProgressOverlayView *progressView;
     NetworkInterface *interface;
+    int NodeID;
     
     UIButton *introductionBtn,*productBtn,*serviceBtn;
 }
 
 @property (nonatomic,assign) id <HomeDelegate> delegate;
+@property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
 
-//- (void)sendHomeNetWorkRequest;
+- (void)sendHome_NetworkInfoData:(NSString *)urlStr NodeID:(int) nodeId;
 
 @end

@@ -91,6 +91,7 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
     homeView = [[HomeView alloc] initWithFrame:subViewFrame];
     [homeView setDelegate:self];
     [tmpView addSubview:homeView];
+    [homeView sendHome_NetworkInfoData:GetSynthesizeHomePage NodeID:0];
     //看装修
     kanZXView = [[KanZXView alloc] initWithFrame:subViewFrame];
     //沟通界面
@@ -135,6 +136,7 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
         case 0:
             [tmpView addSubview:homeView];
             self.navigationItem.titleView = nil;
+            [homeView sendHome_NetworkInfoData:GetSynthesizeHomePage NodeID:0];
             break;
         case 1:
             [tmpView addSubview:kanZXView];
