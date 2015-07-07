@@ -17,6 +17,7 @@
 #import "EMobUserInfo.h"
 #import "MRProgress.h"
 #import "ProjectInfoUtils.h"
+#import "MRProgressOverlayView.h"
 
 #pragma mark -
 #pragma mark 环信应用
