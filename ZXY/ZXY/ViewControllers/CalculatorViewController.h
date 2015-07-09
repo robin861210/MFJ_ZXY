@@ -18,6 +18,9 @@
                 *styleLabel,              //装修风格
                 *cityLabel;               //所在城市
     ChooseLabelViewController *chooseLabelVC;
+    
+    NetworkInterface *interface;
+    MRProgressOverlayView *progressView;
 }
 
 @end
