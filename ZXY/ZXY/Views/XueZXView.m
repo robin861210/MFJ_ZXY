@@ -65,7 +65,7 @@
 //广告
 - (void)creatADView
 {
-    adView = [[ADCustomView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 135*ScreenHeight/568)];
+    adView = [[ADCustomView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 150*ScreenHeight/568)];
     adView.delegate = self;
     [adView setType:left_Circle];
     [BD_tableView setTableHeaderView:adView];

@@ -28,4 +28,8 @@
 - (void)setKanZX_JingXuanDisplayHidden:(BOOL) displayHidden;
 - (void)setKanZX_360AllSDisplay:(BOOL) displayHidden;
 
+- (void)setKanZX_JingXuanCell:(NSMutableDictionary *)JXCellDic;
+- (void)setKanZX_360Alls:(NSMutableDictionary *)allsCellDic;
+
+
 @end

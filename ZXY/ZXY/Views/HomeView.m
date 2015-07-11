@@ -28,7 +28,8 @@
         [self addSubview:homeTableView];
         
         [self creatADView];
-        [self updateHomeViewData];
+        PullDown = NO;
+        PullUp = NO;
         
         progressView = [[MRProgressOverlayView alloc] init];
         progressView.mode = MRProgressOverlayViewModeIndeterminateSmall;
@@ -47,11 +48,10 @@
 #pragma mark 广告类型_模板
 - (void) creatADView
 {
-    adView = [[ADCustomView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth,125*ScreenHeight/568)];
+    adView = [[ADCustomView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth,150*ScreenHeight/568)];
     adView.delegate = self;
     [adView setType:left_Circle];
     [self addSubview:adView];
-//    viewHeight += adView.frame.size.height + adView.frame.origin.y;
     [homeTableView setTableHeaderView:adView];
 }
 
@@ -64,12 +64,39 @@
 }
 
 //更新广告数据
-- (void)updateHomeViewData {
+- (void)updateHomeViewData:(NSMutableArray *)ADInfoArray
+{
+    UIView *adInfoV = [[UIView alloc] initWithFrame:CGRectMake(30, 0, 120, 120*ScreenHeight/568)];
+    [adInfoV setBackgroundColor:RGBACOLOR(54, 54, 54, 0.5)];
+    [adView addSubview:adInfoV];
+    NSMutableArray *infoArray = [[NSMutableArray alloc] init];
+    [infoArray addObject:[[ADInfoArray objectAtIndex:0] objectForKey:@"bannerHouseName"]];
+    [infoArray addObject:[[ADInfoArray objectAtIndex:0] objectForKey:@"bannerHouseLocation"]];
+    [infoArray addObject:[NSString stringWithFormat:@"%@    %@",[[ADInfoArray objectAtIndex:0] objectForKey:@"bannerArea"],[[ADInfoArray objectAtIndex:0] objectForKey:@"bannerDoType"]]];
+    [infoArray addObject:[[ADInfoArray objectAtIndex:0] objectForKey:@"bannerPrice"]];
+    [infoArray addObject:[[ADInfoArray objectAtIndex:0] objectForKey:@"bannerDesMember"]];
+    [infoArray addObject:[[ADInfoArray objectAtIndex:0] objectForKey:@"bannerSupervision"]];
+    for (int i = 0; i < 6; i++) {
+        UILabel *infoLab = [[UILabel alloc] initWithFrame:CGRectMake(10, 10+20*i, 100, 20)];
+        [infoLab setBackgroundColor:[UIColor clearColor]];
+        [infoLab setTextColor:[UIColor whiteColor]];
+        if (i == 0)
+            [infoLab setFont:[UIFont systemFontOfSize:17.0f]];
+        else
+            [infoLab setFont:[UIFont systemFontOfSize:13.0f]];
+        [infoLab setText:[infoArray objectAtIndex:i]];
+        [adInfoV addSubview:infoLab];
+    }
+    //**************
+    NSString *ADpicUrl = [[ADInfoArray objectAtIndex:0] objectForKey:@"bannerPicPath"];
+    NSString *ADpicStr = [[ADInfoArray objectAtIndex:0] objectForKey:@"bannerPicName"];
+    NSArray *ADpicStrArray = [ADpicStr componentsSeparatedByString:@"|"];
+    
     NSMutableArray *AD_InfoArray = [[NSMutableArray alloc] init];
-    for (int i = 0;  i < 3; i++) {
+    for (int i = 0;  i < [ADpicStrArray count]; i++) {
         ADDataBean *bean = [[ADDataBean alloc] init];
         bean.ad_id = [NSString stringWithFormat:@"%d",i];
-        bean.ad_image = @"http://img3.3lian.com/2013/v9/96/82.jpg";
+        bean.ad_image = [NSString stringWithFormat:@"%@%@",ADpicUrl,[ADpicStrArray objectAtIndex:i]];
         [AD_InfoArray addObject:bean];
     }
     [adView refreshImage:AD_InfoArray placeHolderImage:@"placeholder@2x"];
@@ -88,6 +115,7 @@
             [homeTableDataArray addObject:[dataArray objectAtIndex:i]];
         }
     }
+    NodeID = [[[dataArray lastObject] objectForKey:@"NodeID"] intValue];
     [homeTableView reloadData];
 }
 
@@ -159,6 +187,26 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    int typeTag = [[[homeTableDataArray objectAtIndex:indexPath.row] objectForKey:@"NodeType"] intValue];
+    switch (typeTag) {
+        case 0://0为装修进度数据
+            break;
+        case 1://1为知识库数据
+            break;
+        case 3://3为阶段性进度报告
+            break;
+        case 2://2为提醒数据
+            break;
+        case 4://4为效果图
+            break;
+        case 5://5装修日记类型数据
+            break;
+        case 6://6为看装修数据
+            break;
+        default:
+            break;
+    }
+    
     
 }
 
@@ -166,8 +214,11 @@
 #pragma mark -
 #pragma mark NetworkInterface Delegate
 - (void)sendHome_NetworkInfoData:(NSString *)urlStr NodeID:(int) nodeId {
-    NodeID = nodeId;
-    [self showProgressView];
+    if (nodeId == 0) {
+        NodeID = nodeId;
+    }
+    if (!PullDown)
+        [self showProgressView];
     NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
@@ -186,15 +237,55 @@
     if ([[result objectForKey:@"Code"] intValue] == 0 &&
         [[result objectForKey:@"Msg"] length] == 7)
     {
-        [self dismissProgressView:nil];
+        if (!PullDown)
+            [self dismissProgressView:nil];
         NSLog(@"HomeView Line:291行 homeNetworkResult:/n %@",result);
         NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:        [FilterData filterNerworkData:[result objectForKey:@"Response"]]];
         [self updateTableViewInfo:dataArray];
         
     }else {
         NSLog(@"homeView.m Line:296行 homeNetworkResult ErrorMsg :/n %@ ~~~",[result objectForKey:@"Msg"]);
-        [self dismissProgressView:[result objectForKey:@"Msg"]];
+        if (!PullDown)
+            [self dismissProgressView:[result objectForKey:@"Msg"]];
     }
+    if (PullUp) {
+        PullUp = NO;
+        [self endLoadMore];
+    }
+    if (PullDown) {
+        PullDown = NO;
+        [self endRefreshing];
+    }
+    
+    [self sendHomeADInfo_Network:GetHomeBannerDraw];
+}
+
+- (void)sendHomeADInfo_Network:(NSString *)urlStr {
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    
+    [interface setInterfaceDidFinish:@selector(ADInfoNetworkResult:)];
+    [interface sendRequest:urlStr Parameters:postData Type:get_request];
+}
+
+- (void)ADInfoNetworkResult:(NSDictionary *) ADresult {
+    if ([[ADresult objectForKey:@"Code"] intValue] == 0 &&
+        [[ADresult objectForKey:@"Msg"] length] == 7)
+    {
+        NSLog(@"HomeView Line:216行 homeNetworkResult:/n %@",ADresult);
+        NSMutableArray *ADdataArray = [[NSMutableArray alloc] initWithArray:        [FilterData filterNerworkData:[ADresult objectForKey:@"Response"]]];
+        [self updateHomeViewData:ADdataArray];
+        
+    }else {
+        NSLog(@"homeView.m Line:221行 homeNetworkResult ErrorMsg :/n %@ ~~~",[ADresult objectForKey:@"Msg"]);
+    }
+}
+
+- (void)homeViewNetworkCancel {
+    [interface cancelRequest];
 }
 
 #pragma mark -
@@ -203,19 +294,19 @@
     return CLLRefreshViewLayerTypeOnSuperView;
 }
 - (BOOL)hasRefreshFooterView {
-    return NO;
+    return YES;
 }
 - (BOOL)hasRefreshHeaderView {
     return YES;
 }
 - (void)beginPullDownRefreshing {
-    //        [postDtaDic setValue:@"1" forKey:@"page"];
-    //        [networkData startPost:RestaurantInterface params:postDtaDic tag:33];
+    PullDown = YES;
+    [self sendHome_NetworkInfoData:GetSynthesizeHomePage NodeID:0];
 }
 - (void)beginPullUpLoading {
-    //    int pageCount = [[postDtaDic objectForKey:@"page"] intValue];
-    //    [postDtaDic setValue:[NSString stringWithFormat:@"%d",pageCount+1] forKey:@"page"];
-    //    [networkData startPost:RestaurantInterface params:postDtaDic tag:3];
+    PullUp = YES;
+    NodeID = NodeID+1;
+    [self sendHome_NetworkInfoData:GetSynthesizeHomePage NodeID:NodeID];
 }
 - (void)endRefreshing {
     [self.refreshControll endPullDownRefreshing];

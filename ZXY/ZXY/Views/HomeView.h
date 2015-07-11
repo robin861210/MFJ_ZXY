@@ -30,6 +30,7 @@
     MRProgressOverlayView *progressView;
     NetworkInterface *interface;
     int NodeID;
+    BOOL PullDown, PullUp;
     
     UIButton *introductionBtn,*productBtn,*serviceBtn;
 }
@@ -38,5 +39,6 @@
 @property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
 
 - (void)sendHome_NetworkInfoData:(NSString *)urlStr NodeID:(int) nodeId;
+- (void)homeViewNetworkCancel;
 
 @end

@@ -85,7 +85,10 @@
 
 
 //*******************************************************//
-#define GetSynthesizeHomePage   @"GetSynthesizeHomePage"    //获取首页综合信息接口
+#define GetSynthesizeHomePage       @"GetSynthesizeHomePage"        //获取首页综合信息接口
+#define GetHomeBannerDraw           @"GetHomeBannerDraw"            //首页混动图片
+#define GetListOfImpressionDrawing  @"GetListOfImpressionDrawing"   //看装修-精选
+#define GetListOfPano               @"GetListOfPano"                //看装修-360
 
 #define GetKBListInLearnDec     @"GetKBListInLearnDec"      //学装修模块-获取只是库文章列表
 //GetKBListInLearnDec?MachineID=aabbcc&UserID=13112344321&ClientID=1234&sessionid=1234567&Lon=123&Lat=123&Locadesc=辽宁省沈阳市&VerNum=2.4&Src=0&Channcels=0

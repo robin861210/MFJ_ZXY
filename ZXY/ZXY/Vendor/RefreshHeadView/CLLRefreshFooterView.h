@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#define CLLRefreshFooterViewHeight 40
+#define CLLRefreshFooterViewHeight 40*([[UIScreen mainScreen] bounds].size.height)/568
 @interface CLLRefreshFooterView : UIView
 //刷新操作提示
 @property (nonatomic,strong)UILabel *statusLabel;

@@ -139,8 +139,12 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
             [homeView sendHome_NetworkInfoData:GetSynthesizeHomePage NodeID:0];
             break;
         case 1:
+            [homeView homeViewNetworkCancel];
+            
             [tmpView addSubview:kanZXView];
             [segmentView setSegmentSelectImgStrArray:@[@"zxy_choiceed@2x",@"zxy_overAlled@2x"] NormailImgStrArray:@[@"zxy_choice@2x",@"zxy_overAll@2x"] SegmentType:(int)index];
+            [self segmentSelectItem:33 SegmentType:1];
+            [kanZXView sendKanZX_NetworkInfoData:GetListOfImpressionDrawing];
             break;
         case 2:
             [tmpView addSubview:chatListView];

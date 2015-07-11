@@ -257,9 +257,9 @@
     [jdsj_stateLab setFont:[UIFont systemFontOfSize:12.0f]];
     [jdsj_stateLab setTextAlignment:NSTextAlignmentCenter];
     [jdsj_stateLab.layer setCornerRadius:8.0f];
-    [jdsj_stateLab.layer setBorderWidth:2.0f];
-    [jdsj_stateLab.layer setBorderColor:[UIColor greenColor].CGColor];
-    [jdsj_stateLab setTextColor:[UIColor greenColor]];
+    [jdsj_stateLab.layer setBorderWidth:1.0f];
+    [jdsj_stateLab.layer setBorderColor:RGBACOLOR(67, 205, 128, 1.0).CGColor];
+    [jdsj_stateLab setTextColor:RGBACOLOR(67, 205, 128, 1.0)];
     [jdsjView addSubview:jdsj_stateLab];
     //上传时间
     jdsj_uploadTimeLab = [[UILabel alloc] initWithFrame:CGRectMake(jdsjView.frame.size.width-150, 15, 150, 15)];
@@ -323,9 +323,9 @@
     [jdbg_stateLab setFont:[UIFont systemFontOfSize:12.0f]];
     [jdbg_stateLab setTextAlignment:NSTextAlignmentCenter];
     [jdbg_stateLab.layer setCornerRadius:8.0f];
-    [jdbg_stateLab.layer setBorderWidth:2.0f];
+    [jdbg_stateLab.layer setBorderWidth:1.0f];
     [jdbg_stateLab.layer setBorderColor:[UIColor greenColor].CGColor];
-    [jdbg_stateLab setTextColor:[UIColor greenColor]];
+    [jdbg_stateLab setTextColor:RGBACOLOR(67, 205, 128, 1.0)];
     [jdbgView addSubview:jdbg_stateLab];
     //上传时间
     jdbg_uploadTimeLab = [[UILabel alloc] initWithFrame:CGRectMake(jdbgView.frame.size.width-150, 15, 150, 15)];

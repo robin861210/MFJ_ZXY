@@ -8,14 +8,23 @@
 
 #import <UIKit/UIKit.h>
 #import "KanZXTableViewCell.h"
+#import "CLLRefreshHeadController.h"
 
-@interface KanZXView : UIView<UITableViewDataSource,UITableViewDelegate>
+@interface KanZXView : UIView<UITableViewDataSource,UITableViewDelegate,CLLRefreshHeadControllerDelegate>
 {
     UITableView *kanZX_TableV;
-    NSMutableArray *tableViewArray;
+    NSMutableArray *Kan_tableViewArray;
     
     int dataInfoType;
+    
+    MRProgressOverlayView *progressView;
+    NetworkInterface *interface;
+    
+    BOOL PullDown, PullUp;
 }
+
+@property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
+- (void)sendKanZX_NetworkInfoData:(NSString *)urlStr;
 
 - (void)transfromKanZX_Info:(int)typeNum;
 
