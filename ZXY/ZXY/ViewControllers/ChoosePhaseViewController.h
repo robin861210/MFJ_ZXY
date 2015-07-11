@@ -17,6 +17,8 @@
 @interface ChoosePhaseViewController : UIViewController
 {
     NSArray *titleArray;
+    NSArray *iconArray;
+    NSArray *iconSelectArray;
     NSInteger phaseType;
     
     UILabel *titleLabel;         //装修阶段标题

@@ -7,6 +7,7 @@
 //
 
 #import "CalculatorViewController.h"
+#import "SmartOfferViewController.h"
 
 @interface CalculatorViewController ()
 
@@ -23,6 +24,9 @@
     chooseLabelVC.delegate = self;
     
     [self setCalculatorCustomView];
+    [self setConfirmOfferBarButton];
+    
+    interface = [[NetworkInterface alloc] initWithTarget:self didFinish:@selector(networkGetDecBudgetResult:)];
 
 }
 
@@ -104,6 +108,68 @@
     
 }
 
+//设置右导航“发送”按钮addNavigationRightItem
+- (void)setConfirmOfferBarButton
+{
+    UIButton *sendConfirmBt = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 30)];
+    [sendConfirmBt setTitle:@"确定" forState:UIControlStateNormal];
+    [sendConfirmBt setTitleColor:UIColorFromHex(0x35c083) forState:UIControlStateNormal];
+    sendConfirmBt.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+    
+    [sendConfirmBt addTarget:self action:@selector(sendGetDecBudgetRequest) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barBtItem = [[UIBarButtonItem alloc] initWithCustomView:sendConfirmBt];
+    [self.navigationItem setRightBarButtonItem:barBtItem];
+    
+}
+
+#pragma mark -
+#pragma mark NetworkInterface Delegate
+//发送“装修预算”接口
+- (void)sendGetDecBudgetRequest
+{
+    [self showProgressView];
+
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    [postData setValue:areaTextF.text forKey:@"Area"];
+    [postData setValue:modelLabel.text forKey:@"RoomType"];
+    [postData setValue:roomHallWhoLabel.text forKey:@"RoomCount"];
+    [postData setValue:gradeLabel.text forKey:@"DecRank"];
+    [postData setValue:styleLabel.text forKey:@"RoomStyle"];
+    [postData setValue:cityLabel.text forKey:@"RoomLocal"];
+
+    NSLog(@"~~~~~~~~ postData :%@",postData);
+    
+    [interface setInterfaceDidFinish:@selector(networkGetDecBudgetResult:)];
+    [interface sendRequest:GetDecBudget Parameters:postData Type:get_request];
+}
+
+- (void)networkGetDecBudgetResult:(NSDictionary *)budgetResult
+{
+
+    if ([[budgetResult objectForKey:@"Code"] intValue] == 0 &&
+        [[budgetResult objectForKey:@"Msg"] length] == 7)
+    {
+        [self dismissProgressView:nil];
+
+        NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:[FilterData filterNerworkData:[budgetResult objectForKey:@"Response"]]];
+        NSLog(@"dataArray:  %@",dataArray);
+        SmartOfferViewController *smartOfferVC = [[SmartOfferViewController alloc] init];
+        [smartOfferVC setTitle:@"只能报价"];
+        smartOfferVC.smartOfferArr = dataArray;
+        [self.navigationController pushViewController:smartOfferVC animated:YES];
+     }else {
+        NSLog(@"~~~ Error Msg :%@ ~~~",[budgetResult objectForKey:@"Msg"]);
+         [self dismissProgressView:[budgetResult objectForKey:@"Msg"]];
+
+    }
+    
+}
+
+//创建“Button”
 - (UIButton *)createCalculatorBtn:(CGRect)frame WithTitleLabText:(NSString *)titleText WithBtnTag:(NSInteger)index WithIsArrow:(BOOL)isArrow
 {
     UIButton *button = [[UIButton alloc] initWithFrame:frame];
@@ -127,6 +193,8 @@
     
     return button;
 }
+
+
 
 //选择计算机中各选项按钮
 - (void)chooseCalculatorOptions:(id)sender
@@ -207,6 +275,27 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - ProgressView Delegate
+- (void)showProgressView {
+    [progressView removeFromSuperview];
+    progressView = [[MRProgressOverlayView alloc] init];
+    progressView.mode = MRProgressOverlayViewModeIndeterminateSmall;
+    [self.view addSubview:progressView];
+    
+    [progressView show:YES];
+}
+- (void)dismissProgressView:(NSString *)titleStr {
+    if (titleStr.length > 0) {
+        [progressView setTitleLabelText:titleStr];
+        [progressView performBlock:^{
+            [progressView dismiss:YES];
+        }afterDelay:0.8f];
+    }else {
+        [progressView dismiss:YES];
+    }
+}
+
 
 /*
 #pragma mark - Navigation

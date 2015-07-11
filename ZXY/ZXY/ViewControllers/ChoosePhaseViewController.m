@@ -21,6 +21,8 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     titleArray = @[@"设计",@"水电",@"瓦工",@"木工",@"油工",@"成品安装",@"工程竣工",@"售后服务"];
+    iconArray = @[@"sj@2x",@"dg@2x",@"wg@2x",@"mg@2x",@"yg@2x",@"zpaz@2x",@"ztjg@2x",@"shfw@2x"];
+    iconSelectArray = @[@"sjed@2x",@"dged@2x",@"wged@2x",@"mged@2x",@"yged@2x",@"zpazed@2x",@"ztjged@2x",@"shfwed@2x"];
     
     [self setChoosePhaseCustomView];
     
@@ -32,14 +34,16 @@
 {
     for (int i = 0; i<[titleArray count]; i++) {
         
-        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake((20+i%4*80)*ScreenWidth/320, 74 +i/4*80*ScreenHeight/568, 40*ScreenHeight/568, 40*ScreenHeight/568)];
-        [btn setBackgroundColor:UIColorFromHex(0x35c083)];
-        btn.layer.borderWidth = 0.6f;
-        btn.layer.masksToBounds = YES;
-        btn.layer.cornerRadius = 20*ScreenHeight/568;
-        [btn addTarget:self action:@selector(choosePhaseBtn:) forControlEvents:UIControlEventTouchUpInside];
-        btn.tag = i+2000;
-        [self.view addSubview:btn];
+        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake((20+i%4*80)*ScreenWidth/320, 74 +i/4*80*ScreenHeight/568, 40*ScreenHeight/568, 40*ScreenHeight/568)];
+        [imgView setImage:LoadImage([iconArray objectAtIndex:i], @"png")];
+        imgView.layer.masksToBounds = YES;
+        imgView.layer.cornerRadius = 20*ScreenHeight/568;
+        imgView.userInteractionEnabled = YES;
+        imgView.tag = i+2000;
+        [imgView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(choosePhaseBtn:)] ];
+        [self.view addSubview:imgView];
+
+        
         
         UILabel *titleLab = [[UILabel alloc] initWithFrame:CGRectMake(i%4*80*ScreenWidth/320, 74 +i/4*80*ScreenHeight/568+45*ScreenHeight/568, 80*ScreenWidth/320, 20*ScreenHeight/568)];
         [titleLab setText:[titleArray objectAtIndex:i]];
@@ -87,52 +91,21 @@
 }
 
 
-- (void)choosePhaseBtn:(id)sender
+- (void)choosePhaseBtn:(UITapGestureRecognizer *)imageTap
 {
     for (int i = 0; i<[titleArray count]; i++) {
-        UIButton *phaseButton = (UIButton *)[self.view viewWithTag:i+2000];
-//        [phaseButton setImage:LoadImage(@"", @"png") forState:UIControlStateNormal];
-        [phaseButton setBackgroundColor:[UIColor blackColor]];
-    }
-    UIButton *button = (UIButton *)sender;
-    switch (button.tag) {
-        case 2000:
-            NSLog(@"设计阶段");
-            break;
-        case 2001:
-            NSLog(@"水电阶段");
-            break;
-        case 2002:
-            NSLog(@"瓦工阶段");
-            break;
-        case 2003:
-            NSLog(@"木工阶段");
-            break;
-        case 2004:
-            NSLog(@"油工阶段");
-            break;
-        case 2005:
-            NSLog(@"成品安装阶段");
-            break;
-        case 2006:
-            NSLog(@"工程竣工阶段");
-            break;
-        case 2007:
-            NSLog(@"售后服务阶段");
-            break;
-            
-        default:
-            break;
+        UIImageView * imageView = (UIImageView *)[self.view viewWithTag:i+2000 ];
+        [imageView setImage:LoadImage([iconArray objectAtIndex:i], @"png")];
     }
     
+
+    //记录选择各阶段按钮
+    phaseType = imageTap.view.tag - 2000;
     
     //按钮换图片
-    UIButton *phaseBtn = (UIButton *)[self.view viewWithTag:button.tag];
-//    [phaseBtn setImage:LoadImage(@"", @"png") forState:UIControlStateNormal];
-    [phaseBtn setBackgroundColor:UIColorFromHex(0x35c083)];
-    
-    //记录选择各阶段按钮
-    phaseType = button.tag - 2000;
+    UIImageView * imageV = (UIImageView *)[self.view viewWithTag: imageTap.view.tag];
+    [imageV setImage:LoadImage([iconSelectArray objectAtIndex:phaseType], @"png")];
+
     
     [titleLabel setText:[titleArray objectAtIndex:phaseType]];
 
