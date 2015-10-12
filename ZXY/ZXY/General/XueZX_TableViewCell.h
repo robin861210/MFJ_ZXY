@@ -14,7 +14,7 @@
     //学装修-知识库
     UIImageView *imageView;
     UILabel *ZSK_titleLab, *hotReadLab;
-    UILabel *ZSK_timeLab;
+    UILabel *ZSK_timeLab, *ZSK_tagLab;
     UILabel *readCountLab;
     UIView *ZSK_lineV;
     
@@ -41,6 +41,7 @@
 - (void)setCellTitleInfo:(NSString *)titleInfoStr;
 - (void)setCellHotReadType:(BOOL)hotReadType;
 - (void)setCellTimeInfo:(NSString *)timeInfoStr;
+- (void)setCellTagInfo:(NSString *)tagInfoStr;
 - (void)setCellReadCount:(NSString *)readCountStr;
 
 //学装修-装修日记

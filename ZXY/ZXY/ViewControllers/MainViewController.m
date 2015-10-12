@@ -102,6 +102,7 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
     [chatListView registerNotifications];
     //学装修
     xueZXView = [[XueZXView alloc] initWithFrame:subViewFrame];
+    xueZXView.delegate = self;
     
     //初始化下方工具栏
     tabArray = @[@"首页",@"看装修",@"在线沟通",@"学装修"];
@@ -153,8 +154,7 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
         case 3:
             [tmpView addSubview:xueZXView];
             [segmentView setSegmentSelectImgStrArray:@[@"zxy_learned@2x",@"zxy_diaryed@2x"] NormailImgStrArray:@[@"zxy_learn@2x",@"zxy_diary@2x"] SegmentType:(int)index];
-//            [xueZXView sendXueZX_ZSK_NetworkInfoData:GetKBListInLearnDec];
-            [xueZXView sendXueZX_ZSK_NetworkInfoData:GetSynthesizeHomePage];
+            [xueZXView sendXueZX_ZSK_NetworkInfoData:GetKBListInLearnDec];
             break;
         default:
             break;
@@ -196,6 +196,24 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
     }
 }
 
+#pragma mark -
+#pragma mark xueZXView pushViewController Delegate
+- (void)xueZXView_ZSKWebDelegate:(NSString *)webDetailStr
+{
+    WebViewController *webVC = [[WebViewController alloc] init];
+    webVC.htmlFlag = NO;
+//    webVC.webHtmlTitleStr = [[dataArray objectAtIndex:0] objectForKey:@"KBArtTitle"];
+//    webVC.webHtmlStr = webDetailStr;
+    webVC.webURL = webDetailStr;
+    [webVC setTitle:@"文章详情"];
+    //分享需要
+//    webVC.shareLogoImg = [[dataArray objectAtIndex:0] objectForKey:@"KBArtPic"];
+//    webVC.shareText = [[dataArray objectAtIndex:0] objectForKey:@"ShareText"];
+//    webVC.shareUrl = [[dataArray objectAtIndex:0] objectForKey:@"ShareUrl"];
+//    webVC.shareID = [[dataArray objectAtIndex:0] objectForKey:@"KBArtID"];
+    [self.navigationController pushViewController:webVC animated:YES];
+
+}
 
 #pragma mark -
 #pragma mark HomeView Delegate

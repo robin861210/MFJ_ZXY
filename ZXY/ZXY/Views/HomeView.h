@@ -16,6 +16,7 @@
 @protocol HomeDelegate <NSObject>
 
 - (void)selectHomeADItem:(NSString *)ad_Info;
+- (void)selectHomeItemCell:(NSString *) webUrl;
 
 @end
 

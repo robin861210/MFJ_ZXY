@@ -11,6 +11,12 @@
 #import "ADDataBean.h"
 #import "CLLRefreshHeadController.h"
 
+@protocol XueZXViewDelegate <NSObject>
+
+- (void)xueZXView_ZSKWebDelegate:(NSString *)webDetailStr;
+
+@end
+
 @interface XueZXView : UIView<UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate,CLLRefreshHeadControllerDelegate,ADCustomViewDelegate>
 {
     ADCustomView *adView;
@@ -27,6 +33,7 @@
 @property (nonatomic, assign)NSInteger selectType;
 @property (nonatomic, strong)NSArray *tableDataArray;
 @property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
+@property (nonatomic,assign) id <XueZXViewDelegate> delegate;
 
 - (void)sendXueZX_ZSK_NetworkInfoData:(NSString *)postInfoData;
 

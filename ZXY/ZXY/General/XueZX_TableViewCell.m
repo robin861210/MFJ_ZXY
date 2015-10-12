@@ -30,9 +30,12 @@
     [imageView setBackgroundColor:[UIColor clearColor]];
     [self addSubview:imageView];
     
-    ZSK_titleLab = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, self.frame.size.width-90, 20)];
+    ZSK_titleLab = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, ScreenWidth-90, 36)];
+    [ZSK_titleLab setLineBreakMode:NSLineBreakByWordWrapping];
+    [ZSK_titleLab setNumberOfLines:2];
     [ZSK_titleLab setBackgroundColor:[UIColor clearColor]];
-    [ZSK_titleLab setFont:[UIFont systemFontOfSize:15.0f]];
+    [ZSK_titleLab setFont:[UIFont systemFontOfSize:13.0f]];
+    [ZSK_titleLab setTextColor:[UIColor grayColor]];
     [self addSubview:ZSK_titleLab];
     
     hotReadLab = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-90, 5, 90, 20)];
@@ -43,10 +46,17 @@
     [hotReadLab setHidden:YES];
     [self addSubview:hotReadLab];
     
-    ZSK_timeLab = [[UILabel alloc] initWithFrame:CGRectMake(80, 30, self.frame.size.width, 20)];
+    ZSK_timeLab = [[UILabel alloc] initWithFrame:CGRectMake(85, 36, ScreenWidth, 20)];
     [ZSK_timeLab setBackgroundColor:[UIColor clearColor]];
     [ZSK_timeLab setFont:[UIFont systemFontOfSize:13.0f]];
+    [ZSK_timeLab setTextColor:[UIColor grayColor]];
     [self addSubview:ZSK_timeLab];
+    
+    ZSK_tagLab = [[UILabel alloc] initWithFrame:CGRectMake(85, 60, ScreenWidth, 15)];
+    [ZSK_tagLab setBackgroundColor:[UIColor clearColor]];
+    [ZSK_tagLab setFont:[UIFont systemFontOfSize:13.0f]];
+    [ZSK_tagLab setTextColor:[UIColor grayColor]];
+    [self addSubview:ZSK_tagLab];
     
     readCountLab = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-110, 40, 100, 20)];
     [readCountLab setBackgroundColor:[UIColor clearColor]];
@@ -69,11 +79,16 @@
 }
 
 - (void)setCellHotReadType:(BOOL)hotReadType {
-    [hotReadLab setHidden:hotReadType];
+//    [hotReadLab setHidden:hotReadType];
+    [hotReadLab setHidden:YES];
 }
 
 - (void)setCellTimeInfo:(NSString *)timeInfoStr {
     [ZSK_timeLab setText:timeInfoStr];
+}
+
+- (void)setCellTagInfo:(NSString *)tagInfoStr {
+    [ZSK_tagLab setText:tagInfoStr];
 }
 
 - (void)setCellReadCount:(NSString *)readCountStr {
@@ -85,6 +100,7 @@
     [ZSK_titleLab setHidden:cellHidden];
     [hotReadLab setHidden:cellHidden];
     [ZSK_timeLab setHidden:cellHidden];
+    [ZSK_tagLab setHidden:cellHidden];
     [readCountLab setHidden:cellHidden];
     [ZSK_lineV setHidden:cellHidden];
 }

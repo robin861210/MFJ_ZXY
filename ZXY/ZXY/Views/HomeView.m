@@ -188,26 +188,26 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int typeTag = [[[homeTableDataArray objectAtIndex:indexPath.row] objectForKey:@"NodeType"] intValue];
+    NSString *webUrlStr = [[homeTableDataArray objectAtIndex:indexPath.row] objectForKey:@"NodeUrl"];
     switch (typeTag) {
         case 0://0为装修进度数据
-            break;
         case 1://1为知识库数据
-            break;
-        case 3://3为阶段性进度报告
-            break;
         case 2://2为提醒数据
+        case 3://3为阶段性进度报告
+        case 5://5装修日记类型数据
+        case 6://6为看装修数据
+            if ([_delegate respondsToSelector:@selector(selectHomeItemCell:)]) {
+                 [_delegate selectHomeItemCell:[NSString stringWithFormat:@"%@",webUrlStr]];
+            }
             break;
         case 4://4为效果图
-            break;
-        case 5://5装修日记类型数据
-            break;
-        case 6://6为看装修数据
+            if ([_delegate respondsToSelector:@selector(selectHomeItemCell:)]) {
+                [_delegate selectHomeItemCell:@""];
+            }
             break;
         default:
             break;
     }
-    
-    
 }
 
 

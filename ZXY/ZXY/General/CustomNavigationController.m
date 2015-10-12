@@ -38,7 +38,7 @@
     UIImage* image = [UIImage imageNamed:@"nav_back@2x.png"];
     UIImage* imagef = [UIImage imageNamed:@"nav_backed@2x.png"];
     
-    CGRect backframe = CGRectMake(0, 0, 30, 30);
+    CGRect backframe = CGRectMake(0, 0, 15, 20);
     UIButton* backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.frame = backframe;
     [backButton setBackgroundImage:image forState:UIControlStateNormal];

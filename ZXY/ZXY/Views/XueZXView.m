@@ -23,20 +23,20 @@
         
         viewWidth = self.frame.size.width;
         viewHeight = self.frame.size.height;
-        /*
-        customSearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(10, 5, viewWidth-20, 30)];
-        [customSearchBar setDelegate:self];
-        [customSearchBar setPlaceholder:@"请输入搜索内容"];
-        [customSearchBar setBackgroundColor:[UIColor clearColor]];
-        [customSearchBar setBarTintColor:[UIColor clearColor]];
-        [customSearchBar setKeyboardType:UIKeyboardTypeDefault];
-        [customSearchBar setShowsCancelButton:YES animated:YES];
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] > 7.0) {
-            [[[[customSearchBar.subviews objectAtIndex:0] subviews] objectAtIndex:0] removeFromSuperview];
-        }
-        [customSearchBar setHidden:YES];
-        [self addSubview:customSearchBar];
-        */
+        
+//        customSearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(10, 5, viewWidth-20, 30)];
+//        [customSearchBar setDelegate:self];
+//        [customSearchBar setPlaceholder:@"请输入搜索内容"];
+//        [customSearchBar setBackgroundColor:[UIColor clearColor]];
+//        [customSearchBar setBarTintColor:[UIColor clearColor]];
+//        [customSearchBar setKeyboardType:UIKeyboardTypeDefault];
+//        [customSearchBar setShowsCancelButton:YES animated:YES];
+//        if ([[[UIDevice currentDevice] systemVersion] floatValue] > 7.0) {
+//            [[[[customSearchBar.subviews objectAtIndex:0] subviews] objectAtIndex:0] removeFromSuperview];
+//        }
+//        [customSearchBar setHidden:YES];
+//        [self addSubview:customSearchBar];
+        
         BD_tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, viewHeight)];
         [BD_tableView setBackgroundColor:[UIColor clearColor]];
         [BD_tableView setDelegate:self];
@@ -96,8 +96,8 @@
     //添加上提加载、下拉更多
     self.refreshControll = [[CLLRefreshHeadController alloc] initWithScrollView:BD_tableView viewDelegate:self];
 }
-/*
-//添加搜索按钮
+
+/*/添加搜索按钮
 - (void)addNavigationRightItem
 {
     UIButton *searchBt = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
@@ -156,12 +156,16 @@
         [cell setCellTitleInfo:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBTitle"]];
         [cell setCellHotReadType:![[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"isHot"]];
         [cell setCellTimeInfo:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBDateTime"]];
+        [cell setCellTagInfo:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBTag"]];
+        [cell setCellTagInfo:@"装修前"];
+        
 
     }else if (cellType == 35) {
         [cell setZSK_CellDisplay:YES];
         [cell setZXRJ_CellDisplay:NO];
     }
     
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 
@@ -172,17 +176,17 @@
         [customSearchBar resignFirstResponder];
         [customSearchBar setHidden:YES];
     }
-    //发送获取文章请求
-    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
-    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
-    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
-    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
-    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
-    [postData setValue:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"KBArtID"] forKey:@"KBArtID"];
-    [interface setInterfaceDidFinish:@selector(NetworkResult:)];
-    [interface sendRequest:GetKBDetail Parameters:postData Type:get_request];
-    [self showProgressView];
-    //发送
+    
+    if (cellType == 33) {
+        if ([_delegate respondsToSelector:@selector(xueZXView_ZSKWebDelegate:)])
+        {
+            [_delegate xueZXView_ZSKWebDelegate:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBDetailUrl"]];
+        }
+    }
+    if (cellType == 35) {
+        
+    }
+    
 }
 
 - (void)transfromXueZX_Info:(int)typeNum
@@ -280,6 +284,7 @@
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
     [postData setValue:@"0" forKey:@"NodeID"];
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ProjectID"] forKey:@"ProjectID"];
+    [postData setValue:@"0" forKey:@"KBTypeID"];
     [interface setInterfaceDidFinish:@selector(ZSK_NetworkResult:)];
     [interface sendRequest:urlStr Parameters:postData Type:get_request];
 }
@@ -295,31 +300,6 @@
         [self updataTableViewData:dataArray];
     }else {
         NSLog(@"XueZXView.m Line:296行 ZSK_NetworkResult ErrorMsg :/n %@ ~~~",[result objectForKey:@"Msg"]);
-        [self dismissProgressView:[result objectForKey:@"Msg"]];
-    }
-}
-
-- (void)NetworkResult:(NSDictionary *)result {
-    if ([[result objectForKey:@"Code"] intValue] == 0 &&
-        [[result objectForKey:@"Msg"] length] ==7)
-    {
-        [self dismissProgressView:nil];
-        NSLog(@"~~~ BDXQ_ViewController.m 218行 result:%@ ~~~",result);
-        NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:[FilterData filterNerworkData:[result objectForKey:@"Response"]]];
-        WebViewController *webVC = [[WebViewController alloc] init];
-        webVC.htmlFlag = YES;
-        webVC.webHtmlTitleStr = [[dataArray objectAtIndex:0] objectForKey:@"KBArtTitle"];
-        webVC.webHtmlStr = [[dataArray objectAtIndex:0] objectForKey:@"Content"];
-        [webVC setTitle:@"装修小常识"];
-        //分享需要
-        webVC.shareLogoImg = [[dataArray objectAtIndex:0] objectForKey:@"KBArtPic"];
-        webVC.shareText = [[dataArray objectAtIndex:0] objectForKey:@"ShareText"];
-        webVC.shareUrl = [[dataArray objectAtIndex:0] objectForKey:@"ShareUrl"];
-        webVC.shareID = [[dataArray objectAtIndex:0] objectForKey:@"KBArtID"];
-////////[self.navigationController pushViewController:webVC animated:YES];
-        [self saveReadNumber:[[dataArray objectAtIndex:0] objectForKey:@"KBArtID"]];
-    }else {
-        NSLog(@"~~~ BDXQ_ViewController.m 227行 ErrorMsg :%@ ~~~",[result objectForKey:@"Msg"]);
         [self dismissProgressView:[result objectForKey:@"Msg"]];
     }
 }

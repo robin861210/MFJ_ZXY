@@ -13,8 +13,9 @@
 #import "XueZXView.h"
 #import "ChatListView.h"
 #import "CustomSegmentView.h"
+#import "WebViewController.h"
 
-@interface MainViewController : UIViewController<TabBarViewDelegate,HomeDelegate,CustomSegmentViewDelegate>
+@interface MainViewController : UIViewController<TabBarViewDelegate,HomeDelegate,XueZXViewDelegate,CustomSegmentViewDelegate>
 {
     UIView *tmpView;
     TabBarView *tabBarView;
