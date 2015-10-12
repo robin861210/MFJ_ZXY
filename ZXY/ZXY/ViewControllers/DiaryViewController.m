@@ -23,8 +23,12 @@
     [self addDiaryBarButton];
     [self setDiaryCustomView];
     
+    diaryListArray = [[NSMutableArray alloc] init];
+    
     //初始化AFNetwork
     interface = [[NetworkInterface alloc] initWithTarget:self didFinish:@selector(diaryDetailNetworkResult:)];
+    
+    [self sendDiaryDetailRequest];
     
 }
 
@@ -33,7 +37,7 @@
     diaryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, ScreenHeight-64) style:UITableViewStylePlain];
     [diaryTableView setBackgroundColor:[UIColor clearColor]];
     [diaryTableView setShowsHorizontalScrollIndicator:NO];
-    [diaryTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [diaryTableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     diaryTableView.delegate = self;
     diaryTableView.dataSource = self;
     [self.view addSubview:diaryTableView];
@@ -61,20 +65,52 @@
     
 }
 
+#pragma mark -
+#pragma mark Network Delegate
 
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+- (void)sendDiaryDetailRequest{
+    [self showProgressView];
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    [postData setValue:[[[ProjectInfoUtils sharedProjectInfoUtils] infoDic] objectForKey:@"ProjectID"] forKey:@"ProjectID"];
+    
+    [interface setInterfaceDidFinish:@selector(diaryDetailNetworkResult:)];
+    [interface sendRequest:GetDecDiary Parameters:postData Type:get_request];
 }
+
+- (void)diaryDetailNetworkResult:(NSDictionary *) result {
+    if ([[result objectForKey:@"Code"] intValue] == 0 &&
+        [[result objectForKey:@"Msg"] length] == 7)
+    {
+        [self dismissProgressView:nil];
+        NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:[FilterData filterNerworkData:[result objectForKey:@"Response"]]];
+        NSLog(@"~~~ dataArray:%@ ~~~",dataArray);
+        diaryListArray = dataArray;
+        
+        [diaryTableView reloadData];
+    }else {
+        NSLog(@"~~~ Error Msg :%@ ~~~",[result objectForKey:@"Msg"]);
+        [self dismissProgressView:[result objectForKey:@"Msg"]];
+    }
+}
+
 
 - (NSInteger )tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 8;
+    return [diaryListArray count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 205.0f*ScreenHeight/568;
+//    return 205.0f*ScreenHeight/568;
+    DiaryTableViewCell *cell = (DiaryTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    
+    NSLog(@"cell height %f",cell.frame.size.height);
+    
+    return cell.cellHeight;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -83,17 +119,21 @@
     diaryTableCell = [tableView dequeueReusableCellWithIdentifier:cellStr];
     if (diaryTableCell == nil) {
         diaryTableCell = [[DiaryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellStr];
-//        diaryTableCell.delegate = self;
     }
     
+    [diaryTableCell updateDiaryCellInfoData:[diaryListArray objectAtIndex:indexPath.row]];
     
     [diaryTableCell setSelectionStyle:UITableViewCellSelectionStyleNone];
+
     return diaryTableCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSLog(@"选中的日记 id = %@",[[diaryListArray objectAtIndex:indexPath.row] objectForKey:@"DecDiaryID"]);
+    DiaryDetailViewController *diaryDetailVC = [[DiaryDetailViewController alloc] init];
+    diaryDetailVC.diaryDic = [diaryListArray objectAtIndex:indexPath.row];
+    [self.navigationController pushViewController:diaryDetailVC animated:YES];
 }
 
 //新建日记按钮

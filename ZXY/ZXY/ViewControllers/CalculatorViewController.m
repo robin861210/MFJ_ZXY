@@ -127,24 +127,32 @@
 //发送“装修预算”接口
 - (void)sendGetDecBudgetRequest
 {
-    [self showProgressView];
+    [areaTextF resignFirstResponder];
+    if ([areaTextF.text length] == 0) {
+        NSLog(@"请输入面积");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入面积" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [alertView show];
+    }else
+    {
+        [self showProgressView];
 
-    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
-    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
-    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
-    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
-    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
-    [postData setValue:areaTextF.text forKey:@"Area"];
-    [postData setValue:modelLabel.text forKey:@"RoomType"];
-    [postData setValue:roomHallWhoLabel.text forKey:@"RoomCount"];
-    [postData setValue:gradeLabel.text forKey:@"DecRank"];
-    [postData setValue:styleLabel.text forKey:@"RoomStyle"];
-    [postData setValue:cityLabel.text forKey:@"RoomLocal"];
-
-    NSLog(@"~~~~~~~~ postData :%@",postData);
-    
-    [interface setInterfaceDidFinish:@selector(networkGetDecBudgetResult:)];
-    [interface sendRequest:GetDecBudget Parameters:postData Type:get_request];
+        NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+        [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+        [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+        [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+        [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+        [postData setValue:areaTextF.text forKey:@"Area"];
+        [postData setValue:modelLabel.text forKey:@"RoomType"];
+        [postData setValue:roomHallWhoLabel.text forKey:@"RoomCount"];
+        [postData setValue:gradeLabel.text forKey:@"DecRank"];
+        [postData setValue:styleLabel.text forKey:@"RoomStyle"];
+        [postData setValue:cityLabel.text forKey:@"RoomLocal"];
+        
+        NSLog(@"~~~~~~~~ postData :%@",postData);
+        
+        [interface setInterfaceDidFinish:@selector(networkGetDecBudgetResult:)];
+        [interface sendRequest:GetDecBudget Parameters:postData Type:get_request];
+    }
 }
 
 - (void)networkGetDecBudgetResult:(NSDictionary *)budgetResult
@@ -158,7 +166,7 @@
         NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:[FilterData filterNerworkData:[budgetResult objectForKey:@"Response"]]];
         NSLog(@"dataArray:  %@",dataArray);
         SmartOfferViewController *smartOfferVC = [[SmartOfferViewController alloc] init];
-        [smartOfferVC setTitle:@"只能报价"];
+        [smartOfferVC setTitle:@"智能报价"];
         smartOfferVC.smartOfferArr = dataArray;
         [self.navigationController pushViewController:smartOfferVC animated:YES];
      }else {

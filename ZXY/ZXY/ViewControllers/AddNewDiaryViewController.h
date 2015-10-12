@@ -21,6 +21,12 @@
     
     ChooseMarkViewController *chooseMarkVC;
     ChoosePhaseViewController *choosePhaseVC;
+    
+    MRProgressOverlayView *progressView;
+    NetworkInterface *interface;
+    
+    NSString *picPath;
+    int num ;
 
 }
 
