@@ -38,7 +38,8 @@
     viewHeight +=15*ScreenHeight/568;
     
     halfPriceLabel  = [[UILabel alloc] initWithFrame:CGRectMake(16*ScreenWidth/320, viewHeight, 280*ScreenWidth/320, 30*ScreenHeight/568)];
-    [halfPriceLabel setText:@"￥26600.00"];
+//    [halfPriceLabel setText:@"￥26600.00"];
+    [halfPriceLabel setText:self.smartOfferArr[0][@"HalfDoPrice"]];
     [halfPriceLabel setTextColor:UIColorFromHex(0x35c083)];
     [halfPriceLabel setTextAlignment:NSTextAlignmentLeft];
     [halfPriceLabel setFont:[UIFont boldSystemFontOfSize:20.0f]];
@@ -61,7 +62,8 @@
     viewHeight +=15*ScreenHeight/568;
     
     allPriceLabel  = [[UILabel alloc] initWithFrame:CGRectMake(16*ScreenWidth/320, viewHeight, 280*ScreenWidth/320, 30*ScreenHeight/568)];
-    [allPriceLabel setText:@"￥56392.00"];
+//    [allPriceLabel setText:@"￥56392.00"];
+    [allPriceLabel setText:self.smartOfferArr[0][@"AllDoPrice"]];
     [allPriceLabel setTextColor:UIColorFromHex(0x35c083)];
     [allPriceLabel setTextAlignment:NSTextAlignmentLeft];
     [allPriceLabel setFont:[UIFont boldSystemFontOfSize:20.0f]];

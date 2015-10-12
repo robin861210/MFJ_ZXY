@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DiaryTableViewCell.h"
+#import "DiaryDetailViewController.h"
 
 @interface DiaryViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 {
@@ -16,6 +17,8 @@
     
     MRProgressOverlayView *progressView;
     NetworkInterface *interface;
+    
+    NSMutableArray *diaryListArray;
 }
 
 @end

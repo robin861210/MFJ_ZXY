@@ -44,6 +44,8 @@
 
     [self setAddDiaryBarButton];
     
+    interface = [[NetworkInterface alloc] initWithTarget:self didFinish:@selector(updateWorkFileResult:)];
+    
 }
 
 //设置右导航“发送”按钮addNavigationRightItem
@@ -231,9 +233,121 @@
 
 
 //添加日记按钮
+//点击提交”上传施工照片“按钮
 - (void)sendAddNewDiaryRequest:(id)sender
 {
     NSLog(@"发送 添加日记");
+    if ([self.assets count] == 0) {
+        NSLog(@"未传照片");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"上传失败，忘记选择要上传的图片？" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [alertView show];
+    }else
+    {
+        NSMutableArray *uploadArray = [[NSMutableArray alloc] init];
+        for (int i = 0; i<[self.assets count]; i++) {
+            UIImage *image = nil;
+            if ([[self.assets objectAtIndex:i] isKindOfClass:[UIImage class]]) {
+                image = [self.assets objectAtIndex:i];
+            }else
+            {
+                image = [self fullResolutionImageFromALAsset:[self.assets objectAtIndex:i]];
+            }
+            //上传图片
+            //            UIImage * uploadImg = [self scale:image toSize:CGSizeMake(300, 300)];
+            UIImage *uploadImg = [self scale:image toSize:CGSizeMake(image.size.width/4, image.size.width/4)];
+            NSData * uploadImgData = UIImagePNGRepresentation(uploadImg);
+            
+            //图片保存的路径
+            //这里将图片放在沙盒的documents文件夹中
+            NSString * DocumentsPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+            //文件管理器
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            //把刚刚图片转换的data对象拷贝至沙盒中 并保存为image.png
+            [fileManager createDirectoryAtPath:DocumentsPath withIntermediateDirectories:YES attributes:nil error:nil];
+            [fileManager createFileAtPath:[DocumentsPath stringByAppendingString:[NSString stringWithFormat:@"/image%d.png",i]] contents:uploadImgData attributes:nil];
+            //得到选择后沙盒中图片的完整路径
+            NSString * filePath = [[NSString alloc]initWithFormat:@"%@/image%d.png",DocumentsPath, i];
+            
+            //发发送 上传图片 请求
+            [self sendUpdateLoadPicRequest:filePath];
+            
+            [uploadArray addObject:filePath];
+            
+        }
+        NSLog(@"aaaaaaaaaaaaa  %@",uploadArray);
+    }
+}
+
+
+//上传图片接口
+- (void)sendUpdateLoadPicRequest:(NSString *)compalinImgData
+{
+    [self showProgressView];
+    
+    //页面归位
+    //    [interface setInterfaceDidFinish:@selector(updateWorkFileResult:)];
+    [interface uploadFileURL:UpdateLoadPic filePath:compalinImgData keyName:@"picture" params:nil];
+}
+
+- (void)updateWorkFileResult:(NSDictionary *)updateResult
+{
+    num++;
+    NSLog(@"上传文件：%@",updateResult);
+    NSLog(@"num:%d",num);
+    if ([[updateResult objectForKey:@"Code"] intValue] == 0 && [[updateResult objectForKey:@"Msg"] length] == 7) {
+        if (num == 1) {
+            picPath = [updateResult objectForKey:@"Response"];
+        }else
+        {
+            picPath = [picPath stringByAppendingFormat:@"|%@", [updateResult objectForKey:@"Response"]];
+        }
+        NSLog(@"picPath  :%@",picPath);
+        if (num == [self.assets count]) {
+            [self sendSubmitDecDiaryRequest];
+        }
+    }else
+    {
+        [self dismissProgressView:@"上传失败"];
+    }
+}
+
+#pragma mark -
+#pragma mark Network Delegate
+
+- (void)sendSubmitDecDiaryRequest{
+    [self showProgressView];
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:@"" forKey:@"DecDiary"];
+    [postData setValue:[[ProjectInfoUtils sharedProjectInfoUtils].infoDic objectForKey:@"ProjectID"] forKey:@"ProjectID"];
+    [postData setValue:picPath forKey:@"PicPath"];
+    [postData setValue:zxPhaseLab.text forKey:@"Stage"];
+    [postData setValue:zxMarkLab.text forKey:@"DecLabel"];
+    [postData setValue:@"" forKey:@"DecCommunity"];
+    [postData setValue:@"" forKey:@"DecArea"];
+    [postData setValue:@"" forKey:@"DecPrice"];
+    [postData setValue:@"" forKey:@"DecType"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    [postData setValue:[[[ProjectInfoUtils sharedProjectInfoUtils] infoDic] objectForKey:@"ProjectID"] forKey:@"ProjectID"];
+    
+    [interface setInterfaceDidFinish:@selector(submitDecDiaryNetworkResult:)];
+    [interface sendRequest:SubmitDecDiary Parameters:postData Type:get_request];
+}
+
+- (void)submitDecDiaryNetworkResult:(NSDictionary *) result {
+    if ([[result objectForKey:@"Code"] intValue] == 0 &&
+        [[result objectForKey:@"Msg"] length] == 7)
+    {
+        [self dismissProgressView:nil];
+        NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:[FilterData filterNerworkData:[result objectForKey:@"Response"]]];
+        NSLog(@"~~~ dataArray:%@ ~~~",dataArray);
+        
+    }else {
+        NSLog(@"~~~ Error Msg :%@ ~~~",[result objectForKey:@"Msg"]);
+        [self dismissProgressView:[result objectForKey:@"Msg"]];
+    }
 }
 
 
@@ -401,6 +515,27 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+#pragma mark - ProgressView Delegate
+- (void)showProgressView {
+    [progressView removeFromSuperview];
+    progressView = [[MRProgressOverlayView alloc] init];
+    progressView.mode = MRProgressOverlayViewModeIndeterminateSmall;
+    [self.view addSubview:progressView];
+    
+    [progressView show:YES];
+}
+- (void)dismissProgressView:(NSString *)titleStr {
+    if (titleStr.length > 0) {
+        [progressView setTitleLabelText:titleStr];
+        [progressView performBlock:^{
+            [progressView dismiss:YES];
+        }afterDelay:0.8f];
+    }else {
+        [progressView dismiss:YES];
+    }
 }
 
 /*
