@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "UIImageView+WebCache.h"
 
-@interface XueZX_TableViewCell : UITableViewCell
+@interface XueZX_TableViewCell : UITableViewCell<UIScrollViewDelegate>
 {
     //学装修-知识库
     UIImageView *imageView;
@@ -19,16 +19,13 @@
     UIView *ZSK_lineV;
     
     //学装修-装修日记
-    UIImageView *userHeadImgV;
-    UILabel *titleLab, *addressLab, *statusLab;
+    UIImageView *headImgV;
+    UIImageView *zxCollImgView, *seenNumImgView;
+    UILabel *zxStateLab, *zxTitleLab, *zxNumLab,
+            *zxCollectionLab, *seenNumLab, *decInfoLab,
+            *diaryContentLab, *diaryTimeLab;
     
-    UIImageView *startImgView, *commentImgView, *lookImgView;
-    UILabel *numLab, *commentNumLab, *lookNumLab;
-    
-    UIImageView *effectImgV_1, *effectImgV_2, *effectImgV_3;
-    UILabel *timeLab,*infoLab;
-    UIView *lineV;
-    NSMutableArray *effectImgArray;
+    UIScrollView *imgScrollView;
     
 }
 - (void)setZSK_CellDisplay:(BOOL) cellHidden;
@@ -45,7 +42,9 @@
 - (void)setCellReadCount:(NSString *)readCountStr;
 
 //学装修-装修日记
+@property (nonatomic, assign) float cellHeight;
 - (void)create_ZXRJ_TableCell;
+- (void)updateDiaryCellInfoData:(NSDictionary *)infoData;
 
 
 @end

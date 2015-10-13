@@ -14,6 +14,7 @@
 #import "ChatListView.h"
 #import "CustomSegmentView.h"
 #import "WebViewController.h"
+#import "DiaryDetailViewController.h"
 
 @interface MainViewController : UIViewController<TabBarViewDelegate,HomeDelegate,XueZXViewDelegate,CustomSegmentViewDelegate>
 {

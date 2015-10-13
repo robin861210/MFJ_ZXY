@@ -212,8 +212,14 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0; //两次提示的默认间
 //    webVC.shareUrl = [[dataArray objectAtIndex:0] objectForKey:@"ShareUrl"];
 //    webVC.shareID = [[dataArray objectAtIndex:0] objectForKey:@"KBArtID"];
     [self.navigationController pushViewController:webVC animated:YES];
-
 }
+- (void)xueZXView_ZXRJDelegate:(NSMutableDictionary *)zxrjDic {
+    DiaryDetailViewController *diaryDetailVC = [[DiaryDetailViewController alloc] init];
+    diaryDetailVC.diaryDic = zxrjDic;
+    [self.navigationController pushViewController:diaryDetailVC animated:YES];
+}
+
+
 
 #pragma mark -
 #pragma mark HomeView Delegate

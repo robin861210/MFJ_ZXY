@@ -14,6 +14,7 @@
 @protocol XueZXViewDelegate <NSObject>
 
 - (void)xueZXView_ZSKWebDelegate:(NSString *)webDetailStr;
+- (void)xueZXView_ZXRJDelegate:(NSMutableDictionary *)zxrjDic;
 
 @end
 
@@ -34,6 +35,7 @@
 @property (nonatomic, strong)NSArray *tableDataArray;
 @property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
 @property (nonatomic,assign) id <XueZXViewDelegate> delegate;
+
 
 - (void)sendXueZX_ZSK_NetworkInfoData:(NSString *)postInfoData;
 

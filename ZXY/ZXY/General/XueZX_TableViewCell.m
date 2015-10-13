@@ -108,104 +108,206 @@
 #pragma mark -
 #pragma mark 学装修-装修日记
 - (void)create_ZXRJ_TableCell {
-//    UIImageView *startImgView, *commentImgView, *lookImgView;
-//    UILabel *numLab, *commentNumLab, *lookNumLab;
+    //头像
+    headImgV = [[UIImageView alloc] initWithFrame:CGRectMake(10*ScreenWidth/320, 10*ScreenWidth/320, 45*ScreenWidth/320, 45*ScreenWidth/320)];
+    headImgV.layer.borderColor = [UIColorFromHex(0xbfbebe) CGColor];
+    headImgV.layer.borderWidth = 0.5f;
+    headImgV.layer.masksToBounds = YES;
+    headImgV.layer.cornerRadius = headImgV.frame.size.width/2;
+    [headImgV setImage:LoadImage(@"head", @"jpg")];
+    [self addSubview:headImgV];
     
-//    UILabel *timeLab,*infoLab;
-
-    userHeadImgV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 50, 50)];
-    [userHeadImgV setBackgroundColor:[UIColor clearColor]];
-    [userHeadImgV setImage:LoadImage(@"head", @"jpg")];
-    [userHeadImgV.layer setMasksToBounds:YES];
-    [userHeadImgV.layer setCornerRadius:25.0f];
-    [self addSubview:userHeadImgV];
+    //装修状态
+    zxStateLab = [[UILabel alloc] initWithFrame:CGRectMake(12*ScreenWidth/320, 65*ScreenWidth/320, 40*ScreenWidth/320, 13*ScreenHeight/568)];
+    zxStateLab.layer.borderColor = [UIColorFromHex(0x35c083) CGColor];
+    zxStateLab.layer.borderWidth = 0.5f;
+    zxStateLab.layer.masksToBounds = YES;
+    zxStateLab.layer.cornerRadius = 2.0f;
+//    [zxStateLab setText:@"装修完"];
+    [zxStateLab setTextAlignment:NSTextAlignmentCenter];
+    [zxStateLab setTextColor:UIColorFromHex(0x35c083)];
+    [zxStateLab setFont:[UIFont systemFontOfSize:11.0f]];
+    [self addSubview:zxStateLab];
     
-    statusLab = [[UILabel alloc] initWithFrame:CGRectMake(10, 70, 50, 30)];
-    [statusLab setBackgroundColor:[UIColor clearColor]];
-    [statusLab.layer setBorderWidth:3.0f];
-    [statusLab.layer setBorderColor:[UIColor greenColor].CGColor];
-    [statusLab.layer setCornerRadius:3.0f];
-    [statusLab setFont:[UIFont boldSystemFontOfSize:13.0f]];
-    [statusLab setTextAlignment:NSTextAlignmentCenter];
-    [statusLab setText:@"装修完"];
-    [self addSubview:statusLab];
+    //日记名称
+    zxTitleLab = [[UILabel alloc] initWithFrame:CGRectMake(65*ScreenWidth/320, 10*ScreenHeight/568, 0, 20*ScreenHeight/568)];
+    //        [zxTitleLab setText:@"装修易在线工地"];
+    [zxTitleLab setTextColor:[UIColor blackColor]];
+    [zxTitleLab setTextAlignment:NSTextAlignmentLeft];
+    [self addSubview:zxTitleLab];
     
-    titleLab = [[UILabel alloc] initWithFrame:CGRectMake(80, 5, ScreenWidth-185, 20)];
-    [titleLab setBackgroundColor:[UIColor clearColor]];
-    [titleLab setFont:[UIFont boldSystemFontOfSize:15.0f]];
-    [titleLab setText:@"装修易在线工地（3篇）"];
-    [self addSubview:titleLab];
+    //日记篇数
+    zxNumLab = [[UILabel alloc] initWithFrame:CGRectMake(zxTitleLab.frame.size.width + zxTitleLab.frame.origin.x, zxTitleLab.frame.origin.y, 40*ScreenWidth/320, 20*ScreenHeight/568)];
+//    [zxNumLab setText:@"（24篇）"];
+    [zxNumLab setTextColor:UIColorFromHex(0x999999)];
+    [zxNumLab setTextAlignment:NSTextAlignmentLeft];
+    [zxNumLab setFont:[UIFont systemFontOfSize:10.0f]];
+    [self addSubview:zxNumLab];
     
-    addressLab = [[UILabel alloc] initWithFrame:CGRectMake(80, 25, ScreenWidth-185,15)];
-    [addressLab setBackgroundColor:[UIColor clearColor]];
-    [addressLab setFont:[UIFont systemFontOfSize:11.0f]];
-    [addressLab setTextColor:[UIColor grayColor]];
-    [addressLab setText:@"万科家园 | 120m | 10~15万 | 全包"];
-    [self addSubview:addressLab];
+    //收藏数量 UIImageView
+    zxCollImgView = [[UIImageView alloc] initWithFrame:CGRectMake(240*ScreenWidth/320, 10*ScreenHeight/568, 20*ScreenHeight/568, 20*ScreenHeight/568)];
+    [zxCollImgView setImage:LoadImage(@"zxy_look_collection@2x", @"png")];
+    [self addSubview:zxCollImgView];
     
-    effectImgV_1 = [[UIImageView alloc] init];
-    effectImgV_2 = [[UIImageView alloc] init];
-    effectImgV_3 = [[UIImageView alloc] init];
-    effectImgArray = [[NSMutableArray alloc] initWithObjects:effectImgV_1, effectImgV_2, effectImgV_3, nil];
-    for (int i = 0;  i < 3; i++) {
-        UIImageView *imgView = (UIImageView *)[effectImgArray objectAtIndex:i];
-        [imgView setFrame:CGRectMake(80+i*80*(ScreenWidth/320), 50, 75*(ScreenWidth/320), 75*(ScreenWidth/320))];
-        [imgView setBackgroundColor:[UIColor clearColor]];
-        [imgView sd_setImageWithURL:[NSURL URLWithString:@"http://img3.3lian.com/2013/v9/96/82.jpg"] placeholderImage:LoadImage(@"placeholder@2x", @"png")];
-        [self addSubview:imgView];
-    }
+    //收藏数量
+    zxCollectionLab = [[UILabel alloc] initWithFrame:CGRectMake(zxCollImgView.frame.origin.x + zxCollImgView.frame.size.width, 10*ScreenHeight/568, 20*ScreenWidth/320, 20*ScreenHeight/568)];
+//    [zxCollectionLab setText:@"321"];
+    [zxCollectionLab setTextColor:UIColorFromHex(0x999999)];
+    [zxCollectionLab setTextAlignment:NSTextAlignmentLeft];
+    [zxCollectionLab setFont:[UIFont systemFontOfSize:8.0f]];
+    [self addSubview:zxCollectionLab];
     
-    infoLab = [[UILabel alloc] initWithFrame:CGRectMake(80, 140, ScreenWidth-98, 100)];
-    [infoLab setBackgroundColor:[UIColor clearColor]];
-    [infoLab setNumberOfLines:0];
-    [infoLab setLineBreakMode:NSLineBreakByWordWrapping];
-    [infoLab setFont:[UIFont systemFontOfSize:12.0f]];
-    [infoLab setText:@"文体名。凡是不押韵、不重排偶的散体文章，概称散文。随着文学概念的演变和文学体裁的发展，散文的概念也时有变化,在默写历史时期又将小说与其他抒情、记事的文学作品统称为散文，以区别于讲求韵律的诗歌。现代散文是指小说、诗歌、戏剧等文学体裁之外的其他文学作品。"];
-    [self addSubview:infoLab];
+    //查看次数 UIImageView
+    seenNumImgView = [[UIImageView alloc] initWithFrame:CGRectMake(zxCollectionLab.frame.origin.x + zxCollectionLab.frame.size.width, 10*ScreenHeight/568, 20*ScreenHeight/568, 20*ScreenHeight/568)];
+    [seenNumImgView setImage:LoadImage(@"zxy_look_see@2x", @"png")];
+    [self addSubview:seenNumImgView];
     
-    timeLab = [[UILabel alloc] initWithFrame:CGRectMake(80, 240, ScreenWidth-98, 20)];
-    [timeLab setBackgroundColor:[UIColor clearColor]];
-    [timeLab setFont:[UIFont systemFontOfSize:11.0f]];
-    [timeLab setTextColor:[UIColor grayColor]];
-    [timeLab setText:@"2015-06-25 21:30:33"];
-    [self addSubview:timeLab];
+    //查看次数
+    seenNumLab = [[UILabel alloc] initWithFrame:CGRectMake(seenNumImgView.frame.origin.x + seenNumImgView.frame.size.width, 10*ScreenHeight/568, 20*ScreenWidth/320, 20*ScreenHeight/568)];
+//    [seenNumLab setText:@"5"];
+    [seenNumLab setTextColor:UIColorFromHex(0x999999)];
+    [seenNumLab setTextAlignment:NSTextAlignmentLeft];
+    [seenNumLab setFont:[UIFont systemFontOfSize:8.0f]];
+    [self addSubview:seenNumLab];
     
-    lookImgView = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth-45, 5, 20, 20)];
-    [lookImgView setBackgroundColor:[UIColor clearColor]];
-    [lookImgView setImage:LoadImage(@"kanZX_look@2x", @"png")];
-    [self addSubview:lookImgView];
-    lookNumLab = [[UILabel alloc] initWithFrame:CGRectMake(ScreenWidth-25, 5, 25, 20)];
-    [lookNumLab setBackgroundColor:[UIColor clearColor]];
-    [lookNumLab setTextColor:[UIColor grayColor]];
-    [lookNumLab setFont:[UIFont systemFontOfSize:10.0f]];
-    [lookNumLab setText:@"9999"];
-    [self addSubview:lookNumLab];
+    //工程信息
+    decInfoLab = [[UILabel alloc] initWithFrame:CGRectMake(65*ScreenWidth/320, 30*ScreenHeight/568, 255*ScreenWidth/320, 20*ScreenHeight/568)];
+//    [decInfoLab setText:@"万科嘉园 120㎡ 10万-15万 全包"];
+    [decInfoLab setTextColor:UIColorFromHex(0x999999)];
+    [decInfoLab setTextAlignment:NSTextAlignmentLeft];
+    [decInfoLab setFont:[UIFont systemFontOfSize:10.0f]];
+    [self addSubview:decInfoLab];
     
-    commentImgView = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth-85, 5, 20, 20)];
-    [commentImgView setBackgroundColor:[UIColor clearColor]];
-    [commentImgView setImage:LoadImage(@"kanZX_comment@2x", @"png")];
-    [self addSubview:commentImgView];
-    commentNumLab = [[UILabel alloc] initWithFrame:CGRectMake(ScreenWidth-67, 5, 25, 20)];
-    [commentNumLab setBackgroundColor:[UIColor clearColor]];
-    [commentNumLab setTextColor:[UIColor grayColor]];
-    [commentNumLab setFont:[UIFont systemFontOfSize:10.0f]];
-    [commentNumLab setText:@"9999"];
-    [self addSubview:commentNumLab];
+    //装修日记、图片
+    imgScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(65*ScreenWidth/320, 50*ScreenHeight/568, 255*ScreenWidth/320, 75*ScreenHeight/568)];
+    [imgScrollView setBackgroundColor:[UIColor clearColor]];
+    [imgScrollView setShowsHorizontalScrollIndicator:NO];
+    [imgScrollView setShowsVerticalScrollIndicator:NO];
+    [imgScrollView setDelegate:self];
+    [self addSubview:imgScrollView];
     
-    startImgView = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth-123, 5, 20, 20)];
-    [startImgView setBackgroundColor:[UIColor clearColor]];
-    [startImgView setImage:LoadImage(@"kanZX_start@2x", @"png")];
-    [self addSubview:startImgView];
-    numLab = [[UILabel alloc] initWithFrame:CGRectMake(ScreenWidth-106, 5, 25, 20)];
-    [numLab setBackgroundColor:[UIColor clearColor]];
-    [numLab setTextColor:[UIColor grayColor]];
-    [numLab setFont:[UIFont systemFontOfSize:10.0f]];
-    [numLab setText:@"9999"];
-    [self addSubview:numLab];
-
+    //日记内容
+    diaryContentLab = [[UILabel alloc] initWithFrame:CGRectMake(65*ScreenWidth/320, 130*ScreenHeight/568, 255*ScreenWidth/320, 55*ScreenHeight/568)];
+//    [diaryContentLab setText:@"最近在看壁纸，本来初衷是想要地中海的，结果看来看去快变成田园小碎花了，看中的两款都是花的，一个电视墙一个卧室，次卧就刷钱率鹿角漆。昨天看到一款壁布，也挺不错的。店主说好打理，不过我感觉毛蓉蓉的估计会招灰。"];
+    [diaryContentLab setTextColor:UIColorFromHex(0x999999)];
+    [diaryContentLab setTextAlignment:NSTextAlignmentLeft];
+    [diaryContentLab setNumberOfLines:0];
+    [diaryContentLab setLineBreakMode:NSLineBreakByCharWrapping];
+    [diaryContentLab setFont:[UIFont systemFontOfSize:10.0f]];
+    [self addSubview:diaryContentLab];
+    
+    //日记时间
+    diaryTimeLab = [[UILabel alloc] initWithFrame:CGRectMake(65*ScreenWidth/320, 185*ScreenHeight/568, 255*ScreenWidth/320, 20*ScreenHeight/568)];
+//    [diaryTimeLab setText:@"2015-05-14 17:31"];
+    [diaryTimeLab setTextColor:UIColorFromHex(0x999999)];
+    [diaryTimeLab setTextAlignment:NSTextAlignmentLeft];
+    [diaryTimeLab setFont:[UIFont systemFontOfSize:8.0f]];
+    [self addSubview:diaryTimeLab];
 }
 
+//这是装修日记的数据
+- (void)updateDiaryCellInfoData:(NSDictionary *)infoData
+{
+    //头像
+    [headImgV sd_setImageWithURL:[NSURL URLWithString:[infoData objectForKey:@"UserHeadIcon"]] placeholderImage:LoadImage(@"head", @"jpg")];
+    //装修状态
+    switch ([[infoData objectForKey:@"Stage"] integerValue]) {
+        case 1:
+            [zxStateLab setText:@"水电施工"];
+            break;
+        case 2:
+            [zxStateLab setText:@"木工施工"];
+            break;
+        case 3:
+            [zxStateLab setText:@"油工施工"];
+            break;
+        case 4:
+            [zxStateLab setText:@"成品安装"];
+            break;
+        case 5:
+            [zxStateLab setText:@"工程竣工"];
+            break;
+            
+        default:
+            break;
+    }
+    //日记名称
+    CGSize maxSize = CGSizeMake(ScreenWidth, 20*ScreenHeight/568);
+    UIFont *contentFont = [UIFont systemFontOfSize:15.0f];
+    NSString *zxTitleStr = [infoData objectForKey:@"DecCommunity"];
+    CGSize contentSize = [zxTitleStr sizeWithFont:contentFont constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
+    [zxTitleLab setFont:contentFont];
+    [zxTitleLab setFrame:CGRectMake(65*ScreenWidth/320, 10*ScreenHeight/568, contentSize.width, 20*ScreenHeight/568)];
+    [zxTitleLab setText:zxTitleStr];
+    //日记篇数
+    [zxNumLab setText:@"(5篇)"];
+    [zxNumLab setFrame:CGRectMake(zxTitleLab.frame.size.width + zxTitleLab.frame.origin.x+5, zxTitleLab.frame.origin.y, 40*ScreenWidth/320, 20*ScreenHeight/568)];
+    //收藏数量
+    [zxCollectionLab setText:[NSString stringWithFormat:@"%@",[infoData objectForKey:@"CollCount"]]];
+    //信息数量
+    //    [messageNumLab setText:[NSString stringWithFormat:@"%@",[infoData objectForKey:@"ShareCount"]]];
+    //查看次数
+    [seenNumLab setText:[NSString stringWithFormat:@"%@",[infoData objectForKey:@"ShareCount"]]];
+    //装修工程信息
+    [decInfoLab setText:[NSString stringWithFormat:@"%@ | %@㎡ | %@ | %@",[infoData objectForKey:@"DecCommunity"],[infoData objectForKey:@"DecArea"],[infoData objectForKey:@"DecPrice"],[infoData objectForKey:@"DecLabel"]]];
+    
+    NSArray *ADpicStrArray = [[infoData objectForKey:@"PICPATH"] componentsSeparatedByString:@"|"];
+    
+    [self setPicture:ADpicStrArray];
+    
+    //日记内容
+    [diaryContentLab setText:[infoData objectForKey:@"DecDiary"]];
+    CGSize boundSize = CGSizeMake(255*ScreenWidth/320, CGFLOAT_MAX);
+    diaryContentLab.numberOfLines = 0;
+    //    CGSize requiredSize = [diaryContentLab.text sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:boundSize lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize requiredSize = [diaryContentLab.text boundingRectWithSize:boundSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13.0f]} context:nil].size;
+    [diaryContentLab setFrame:CGRectMake(65*ScreenWidth/320, self.cellHeight, 255*ScreenWidth/320, requiredSize.height)];
+    self.cellHeight += requiredSize.height;
+    
+    //日记时间
+    [diaryTimeLab setText:[infoData objectForKey:@"DecDiaryDateTime"]];
+    [diaryTimeLab setFrame:CGRectMake(65*ScreenWidth/320, self.cellHeight, 255*ScreenWidth/320, 20*ScreenHeight/568)];
+    
+    self.cellHeight += 20*ScreenHeight/568;
+    
+}
+- (void)setPicture:(NSArray *)imgNameArr
+{
+    for (UIView *view in [imgScrollView subviews]) {
+        [view removeFromSuperview];
+    }
+    NSLog(@"%.2f",self.cellHeight);
+    if (imgNameArr.count == 0) {
+        [imgScrollView setHidden:YES];
+        self.cellHeight = 55*ScreenHeight/568;
+    }else
+    {
+        [imgScrollView setHidden:NO];
+        self.cellHeight = 125*ScreenHeight/568;
+    }
+    
+    for (int i = 0; i<[imgNameArr count]; i++) {
+        UIImageView *pictureImgV = [[UIImageView alloc] initWithFrame:CGRectMake(i *80*ScreenWidth/320, 0, 75*ScreenHeight/568, 75*ScreenHeight/568)];
+        [pictureImgV sd_setImageWithURL:[NSURL URLWithString:[imgNameArr objectAtIndex:i]] placeholderImage:LoadImage(@"zxDiary@2x", @"jpg")];
+        [imgScrollView addSubview:pictureImgV];
+    }
+}
+
+
 - (void)setZXRJ_CellDisplay:(BOOL) cellHidden {
+    [headImgV setHidden:cellHidden];
+    [zxCollImgView setHidden:cellHidden];
+    [seenNumImgView setHidden:cellHidden];
+    [zxStateLab setHidden:cellHidden];
+    [zxTitleLab setHidden:cellHidden];
+    [zxNumLab setHidden:cellHidden];
+    [zxCollectionLab setHidden:cellHidden];
+    [seenNumLab setHidden:cellHidden];
+    [decInfoLab setHidden:cellHidden];
+    [diaryContentLab setHidden:cellHidden];
+    [diaryTimeLab setHidden:cellHidden];
+    [imgScrollView setHidden:cellHidden];
+    /*
     [userHeadImgV setHidden:cellHidden];
     [titleLab setHidden:cellHidden];
     [addressLab setHidden:cellHidden];
@@ -221,6 +323,7 @@
     [effectImgV_3 setHidden:cellHidden];
     [timeLab setHidden:cellHidden];
     [infoLab setHidden:cellHidden];
+     */
 }
 
 

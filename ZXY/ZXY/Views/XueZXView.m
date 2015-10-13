@@ -136,6 +136,9 @@
 {
     if (cellType == 33) {
         return 80.0f;
+    }else if (cellType == 35) {
+        XueZX_TableViewCell *cell = (XueZX_TableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
     }else {
         return 260.0f;
     }
@@ -163,6 +166,8 @@
     }else if (cellType == 35) {
         [cell setZSK_CellDisplay:YES];
         [cell setZXRJ_CellDisplay:NO];
+        
+        [cell updateDiaryCellInfoData:[self.tableDataArray objectAtIndex:indexPath.row]];
     }
     
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
@@ -178,13 +183,17 @@
     }
     
     if (cellType == 33) {
+        //知识库
         if ([_delegate respondsToSelector:@selector(xueZXView_ZSKWebDelegate:)])
         {
             [_delegate xueZXView_ZSKWebDelegate:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBDetailUrl"]];
         }
     }
     if (cellType == 35) {
-        
+        //装修日记
+        if ([_delegate respondsToSelector:@selector(xueZXView_ZXRJDelegate:)]) {
+            [_delegate xueZXView_ZXRJDelegate:[self.tableDataArray objectAtIndex:indexPath.row]];
+        }
     }
     
 }
@@ -193,12 +202,15 @@
 {
     if (typeNum == 33) {
         cellType = 33; //学装修中的知识库
-        [BD_tableView reloadData];
+        //[BD_tableView reloadData];
+        [self sendXueZX_ZSK_NetworkInfoData:GetKBListInLearnDec];
         [BD_tableView setTableHeaderView:adView];
+        
     }
     if (typeNum == 35) {
         cellType = 35; //学装修中的装修日记
-        [BD_tableView reloadData];
+        //[BD_tableView reloadData];
+        [self sendXueZX_ZSK_NetworkInfoData:GetDecDiary];
         [BD_tableView setTableHeaderView:nil];
     }
 }
@@ -284,7 +296,10 @@
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
     [postData setValue:@"0" forKey:@"NodeID"];
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ProjectID"] forKey:@"ProjectID"];
-    [postData setValue:@"0" forKey:@"KBTypeID"];
+    if (cellType == 33) {
+        [postData setValue:@"1" forKey:@"KBTypeID"];
+    }
+    
     [interface setInterfaceDidFinish:@selector(ZSK_NetworkResult:)];
     [interface sendRequest:urlStr Parameters:postData Type:get_request];
 }
