@@ -183,7 +183,7 @@
     }
     
     if (cellType == 33) {
-        //知识库
+        //知识库 查看是否有更新
         if ([_delegate respondsToSelector:@selector(xueZXView_ZSKWebDelegate:)])
         {
             [_delegate xueZXView_ZSKWebDelegate:[[self.tableDataArray objectAtIndex:indexPath.row] objectForKey:@"DecKBDetailUrl"]];
