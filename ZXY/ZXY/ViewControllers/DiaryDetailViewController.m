@@ -33,6 +33,7 @@
 {
     [self setTopView];
     [self setDairyDetailTableView];
+    [self setMenuCustomView];
 }
 
 //顶部视图
@@ -42,7 +43,7 @@
     tableHeaderView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 175*ScreenHeight/568)];
 //    [tableHeaderView setImage:LoadImage(@"", @"png")];
     [tableHeaderView sd_setImageWithURL:[NSURL URLWithString:@"http://218.25.17.238:8080/zxyPC/upload/mroom/220/zhgj08.jpg"]];
-    [tableHeaderView setExclusiveTouch:YES];
+    [tableHeaderView setUserInteractionEnabled:YES];
     [self.view addSubview:tableHeaderView];
 
 //    //收藏按钮
@@ -73,6 +74,13 @@
     headImgView.layer.cornerRadius = 15.0f;
     [headImgView sd_setImageWithURL:[self.diaryDic objectForKey:@""] placeholderImage:LoadImage(@"head", @"jpg")];
     [tableHeaderView addSubview:headImgView];
+    
+    //功能按钮 菜单
+    UIButton *menuBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [menuBtn setFrame:CGRectMake(ScreenWidth - 30, 10, 20, 20)];
+    [menuBtn setBackgroundImage:LoadImage(@"zxy_diary_menu@2x",@"png") forState:UIControlStateNormal];
+    [menuBtn addTarget:self action:@selector(menuBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [tableHeaderView addSubview:menuBtn];
     
     //工地名称
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 130*ScreenHeight/568, 100*ScreenWidth/320, 16)];
@@ -116,6 +124,57 @@
     [self.view addSubview:diaryTableView];
 }
 
+- (void)setMenuCustomView
+{
+    bgMenuView = [[UIView alloc] initWithFrame:CGRectMake(230*ScreenWidth/320, ScreenHeight-300*ScreenHeight/568, 90*ScreenWidth/320, 300*ScreenHeight/568)];
+    [bgMenuView setBackgroundColor:[UIColor colorWithWhite:0.1 alpha:0.7]];
+    [bgMenuView setHidden:YES];
+    [self.view addSubview:bgMenuView];
+    
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(10*ScreenWidth/320, 15*ScreenHeight/568, 1, 240*ScreenHeight/568)];
+    [lineView setBackgroundColor:[UIColor whiteColor]];
+    [bgMenuView addSubview:lineView];
+    
+    NSArray *titleArray = @[@"准备",@"拆改",@"水电",@"瓦工",@"木工",@"油工",@"成品安装",@"工程竣工",@"入住"];
+    for (int i = 0; i<9; i++) {
+    
+        UIView *roundView = [[UIView alloc] initWithFrame:CGRectMake(10*ScreenWidth/320-2.5, i*30*ScreenHeight/568+15*ScreenHeight/568-2.5, 5, 5)];
+        roundView.layer.cornerRadius = 2.5f;
+        roundView.backgroundColor = [UIColor whiteColor];
+        [bgMenuView addSubview:roundView];
+        
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(20*ScreenWidth/320, i*30*ScreenHeight/568, 70*ScreenWidth/568, 30*ScreenHeight/568)];
+        [btn setBackgroundColor:[UIColor clearColor]];
+        [btn setTag:i];
+        [btn setTitle:titleArray[i] forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont systemFontOfSize:11.0f];
+        [btn addTarget:self action:@selector(zxStageClick:) forControlEvents:UIControlEventTouchUpInside];
+        [bgMenuView addSubview:btn];
+    }
+}
+
+- (void)menuBtnClick
+{
+    NSLog(@"菜单按钮  点击 ");
+    [bgMenuView setHidden:isBgViewHidder];
+    isBgViewHidder = !isBgViewHidder;
+}
+
+#pragma mark  -- 侧边菜单选择按钮
+//装修状态 选择
+- (void)zxStageClick:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+    NSLog(@"adas%lu  \ndad:%lu",button.tag,[diaryArray count]);
+    for (int i = 0; i<[diaryArray count]; i++) {
+        if ([diaryArray[i][@"Stage"] integerValue] == button.tag+1) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            [diaryTableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
+    }
+}
+
+#pragma mark - Network
 - (void)sendDiaryPrivateRequest
 {
     [self showProgressView];
@@ -156,9 +215,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    DiaryDetailTableViewCell *cell = (DiaryDetailTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
     
-    NSLog(@"cell height %f",cell.frame.size.height);
+    DiaryDetailTableViewCell *cell = (DiaryDetailTableViewCell *)[self tableView:tableView cellForRowAtIndexPath:indexPath];
     
     return cell.cellHeight;
 }

@@ -105,6 +105,8 @@
 #define getDecDiaryCommands @"getDecDiaryCommands"   //获取评论日记接口
 //getDecDiaryCommands?PrivateDiaryID=1234&MachineID=aabbcc&UserID=13112344321&ClientID=1234&sessionid=1234567&Lon=123&Lat=123&Locadesc=辽宁省沈阳市&VerNum=2.4&Src=0&Channels=0&InvCode＝1234
 
+#define SubmitMessageToDiary   @"SubmitMessageToDiary"  //评论日记接口
+//SubmitMessageToDiary? PrivateDiaryID=1234&Message=房子装修的很不错哦，真羡慕你家！&MachineID=aabbcc&UserID=13112344321&ClientID=1234&sessionid=1234567&Lon=123&Lat=123&Locadesc=辽宁省沈阳市&VerNum=2.4&Src=0&Channels=0&InvCode＝1234
 
 
 

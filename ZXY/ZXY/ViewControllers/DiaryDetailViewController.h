@@ -16,6 +16,8 @@
     UIImageView *tableHeaderView;
     NSMutableArray *diaryArray;
     UITableView *diaryTableView;
+    UIView *bgMenuView;
+    BOOL isBgViewHidder;
     
     MRProgressOverlayView *progressView;
     NetworkInterface *interface;
