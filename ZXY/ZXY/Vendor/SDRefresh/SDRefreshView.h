@@ -72,4 +72,7 @@ typedef enum {
 
 - (UIEdgeInsets)syntheticalEdgeInsetsWithEdgeInsets:(UIEdgeInsets)edgeInsets;
 
+- (void)deallocObserver;
+
+
 @end

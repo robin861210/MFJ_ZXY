@@ -28,6 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self.view setBackgroundColor:[UIColor orangeColor]];
+
     listIconArray = @[@"center_dec_archives@2x",@"center_dec_diary@2x",@"center_computer@2x",@"center_activity@2x",@"center_score_shop@2x",@"center_give_angry@2x",@"center_advice@2x",@"center_setting@2x"];
     listNameArray = @[@"装修档案",@"装修日记",@"装修计算器",@"优惠活动",@"积分商城",@"投诉建议",@"意见反馈",@"设置"];
     
@@ -189,6 +190,10 @@
             break;
         case 4:
             NSLog(@"积分商城");
+        {
+            [self sendGetScoreShopUrlRequest];
+        }
+            
             break;
         case 5:
             NSLog(@"投诉建议");
@@ -468,8 +473,45 @@
     
 }
 
+- (void)sendGetScoreShopUrlRequest
+{
+    [self showProgressView];
 
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    
+    [interface setInterfaceDidFinish:@selector(getScoreShopUrlNetworkResult:)];
+    [interface sendRequest:GetScoreShopUrl Parameters:postData Type:get_request];
 
+}
+
+- (void)getScoreShopUrlNetworkResult:(NSDictionary *)shopResult
+{
+    if ([[shopResult objectForKey:@"Code"] intValue] == 0 &&
+        [[shopResult objectForKey:@"Msg"] length] == 7)
+    {
+        [self dismissProgressView:nil];
+        NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:[FilterData filterNerworkData:[shopResult objectForKey:@"Response"]]];
+        NSLog(@"~~~ dataArray:%@ ~~~",dataArray);
+        
+        WebViewController *webVC = [[WebViewController alloc] init];
+        [webVC setTitle:@"积分商城"];
+        webVC.htmlFlag = NO;
+        webVC.canShare = NO;
+        webVC.webURL = dataArray[0][@"ScoreShopUrl"];
+
+        NSDictionary *dict =[[NSDictionary alloc] initWithObjectsAndKeys:webVC,@"viewC", nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"pushToFunctionVC" object:nil userInfo:dict];
+        
+    }else {
+        NSLog(@"~~~ Error Msg :%@ ~~~",[shopResult objectForKey:@"Msg"]);
+        [self dismissProgressView:[shopResult objectForKey:@"Msg"]];
+    }
+    
+}
 
 
 #pragma mark - ProgressView Delegate

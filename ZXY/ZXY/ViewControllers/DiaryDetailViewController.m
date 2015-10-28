@@ -17,6 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = @"装修日记列表";
     
     diaryArray = [NSMutableArray array];
     
@@ -116,11 +117,11 @@
 //tableView
 - (void)setDairyDetailTableView
 {
-    diaryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight) style:UITableViewStylePlain];
+    diaryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     [diaryTableView setDelegate:self];
     [diaryTableView setDataSource:self];
     [diaryTableView setTableHeaderView:tableHeaderView];
-    diaryTableView.tableFooterView = [UIView new];
+//    diaryTableView.tableFooterView = [UIView new];
     [self.view addSubview:diaryTableView];
 }
 
@@ -156,8 +157,8 @@
 - (void)menuBtnClick
 {
     NSLog(@"菜单按钮  点击 ");
-    [bgMenuView setHidden:isBgViewHidder];
-    isBgViewHidder = !isBgViewHidder;
+    [bgMenuView setHidden:isBgViewHidden];
+    isBgViewHidden = !isBgViewHidden;
 }
 
 #pragma mark  -- 侧边菜单选择按钮
@@ -250,6 +251,13 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark -
+#pragma mark ViewController Delegate
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [interface cancelRequest];
 }
 
 #pragma mark - ProgressView Delegate

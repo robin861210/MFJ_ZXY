@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "DiaryTableViewCell.h"
 #import "DiaryDetailViewController.h"
+#import "CLLRefreshHeadController.h"
 
-@interface DiaryViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
+@interface DiaryViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,CLLRefreshHeadControllerDelegate>
 {
     DiaryTableViewCell *diaryTableCell;
     UITableView *diaryTableView;
@@ -19,6 +20,10 @@
     NetworkInterface *interface;
     
     NSMutableArray *diaryListArray;
+    NSMutableDictionary *postData;
 }
+
+@property (nonatomic, strong) CLLRefreshHeadController *refreshControll;
+
 
 @end

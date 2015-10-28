@@ -22,6 +22,7 @@
     
     [self addDiaryBarButton];
     [self setDiaryCustomView];
+    [self createOtherWidget];
     
     diaryListArray = [[NSMutableArray alloc] init];
     
@@ -41,6 +42,13 @@
     diaryTableView.delegate = self;
     diaryTableView.dataSource = self;
     [self.view addSubview:diaryTableView];
+}
+
+//创建其他控件
+- (void)createOtherWidget
+{
+    //添加上提加载、下拉更多
+    self.refreshControll = [[CLLRefreshHeadController alloc] initWithScrollView:diaryTableView viewDelegate:self];
 }
 
 //设置右导航“新建”按钮addNavigationRightItem
@@ -70,7 +78,7 @@
 
 - (void)sendDiaryDetailRequest{
     [self showProgressView];
-    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    postData = [[NSMutableDictionary alloc] init];
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
     [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
@@ -145,10 +153,44 @@
     [self.navigationController pushViewController:addNewDiaryVC animated:YES];
 }
 
+#pragma mark -
+#pragma mark CLLRefreshHeadController Delegate
+- (CLLRefreshViewLayerType)refreshViewLayerType {
+    return CLLRefreshViewLayerTypeOnSuperView;
+}
+- (BOOL)hasRefreshFooterView {
+    return YES;
+}
+- (BOOL)hasRefreshHeaderView {
+    return YES;
+}
+- (void)beginPullDownRefreshing {
+    [postData setValue:@"1" forKey:@"page"];
+    [interface sendRequest:GetPrivate Parameters:postData Type:get_request];
+}
+- (void)beginPullUpLoading {
+    int pageCount = [[postData objectForKey:@"page"] intValue];
+    [postData setValue:[NSString stringWithFormat:@"%d",pageCount+1] forKey:@"page"];
+    [interface sendRequest:GetPrivate Parameters:postData Type:get_request];
+}
+- (void)endRefreshing {
+    [self.refreshControll endPullDownRefreshing];
+}
+- (void)endLoadMore {
+    [self.refreshControll endPullUpLoading];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark -
+#pragma mark ViewController Delegate
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [interface cancelRequest];
 }
 
 #pragma mark - ProgressView Delegate

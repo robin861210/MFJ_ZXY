@@ -162,7 +162,7 @@
     for (int i = 0; i<[imgNameArr count]; i++) {
 //        UIImageView *pictureImgV = [[UIImageView alloc] initWithFrame:CGRectMake(i*79*ScreenWidth/320+4*ScreenWidth/320, 0, 75*ScreenHeight/568, 75*ScreenHeight/568)];
         UIImageView *pictureImgV = [[UIImageView alloc] initWithFrame:CGRectMake(i*105*ScreenWidth/320+5*ScreenWidth/320, 0, 100*ScreenHeight/568, 75*ScreenHeight/568)];
-        [pictureImgV sd_setImageWithURL:[NSURL URLWithString:[imgNameArr objectAtIndex:i]] placeholderImage:LoadImage(@"zxDiary@2x", @"jpg")];
+        [pictureImgV sd_setImageWithURL:[NSURL URLWithString:[imgNameArr objectAtIndex:i]] placeholderImage:LoadImage(@"placeholder@2x", @"png")];
         [imgScrollView addSubview:pictureImgV];
     }
 }

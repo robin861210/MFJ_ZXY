@@ -367,6 +367,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    [refreshHeader deallocObserver];
+    [refreshFooter deallocObserver];
+}
+
 /*
 #pragma mark - Navigation
 
