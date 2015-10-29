@@ -42,6 +42,7 @@
 #pragma mark -
 #pragma mark UITableView Delegate
 - (void)updateTableViewInfo:(NSMutableArray *)tableViewArray {
+    [Kan_tableViewArray removeAllObjects];
     [Kan_tableViewArray setArray:tableViewArray];
     [kanZX_TableV reloadData];
 }

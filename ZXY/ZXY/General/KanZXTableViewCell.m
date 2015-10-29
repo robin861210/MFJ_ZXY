@@ -43,11 +43,11 @@
 - (void)create_KanZX_JingXuanCell
 {
     EffectImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, cellHeight-90)];
-    [EffectImgView setBackgroundColor:[UIColor clearColor]];
+    [EffectImgView setBackgroundColor:RGBACOLOR(234, 235, 237, 1)];
     [bgView addSubview:EffectImgView];
     
     perImgView = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth-70, cellHeight-85, 55, 55)];
-    [perImgView setBackgroundColor:[UIColor clearColor]];
+    [perImgView setBackgroundColor:RGBACOLOR(234, 235, 237, 1)];
     [perImgView.layer setMasksToBounds:YES];
     [perImgView.layer setCornerRadius:55/2];
     [bgView addSubview:perImgView];
@@ -82,7 +82,8 @@
     [perImgView sd_setImageWithURL:[NSURL URLWithString:[JXCellDic objectForKey:@"MRoomAuthorIcon"]] placeholderImage:LoadImage(@"placeholder@2x", @"png")];
     [nameLab setText:[JXCellDic objectForKey:@"MRoomName"]];
     [roomTypeLab setText:[JXCellDic objectForKey:@"MRoomStyle"]];
-    [readNumLab setText:[JXCellDic objectForKey:@"MRoomArea"]];
+//    [readNumLab setText:[JXCellDic objectForKey:@"MRoomArea"]];
+    [readNumLab setText:[NSString stringWithFormat:@"%@",[JXCellDic objectForKey:@"MRoomArea"]]];
 }
 
 - (void)setKanZX_360AllSDisplay:(BOOL) displayHidden {
