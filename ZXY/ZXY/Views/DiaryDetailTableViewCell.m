@@ -59,6 +59,28 @@
         [zxStateLab setTextColor:UIColorFromHex(0x35c083)];
         [zxStateLab setFont:[UIFont systemFontOfSize:10.0f]];
         [self addSubview:zxStateLab];
+        
+        goodAndMessView = [[UIView alloc] initWithFrame:CGRectMake(ScreenWidth-100, 210*ScreenHeight/568, 100, 13*ScreenHeight/568)];
+//        [goodAndMessView setBackgroundColor:[UIColor blackColor]];
+        [self addSubview:goodAndMessView];
+        
+        UIImageView *goodImgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 10, 10)];
+        [goodImgView setImage:LoadImage(@"zxy_good@2x", @"png")];
+        [goodAndMessView addSubview:goodImgView];
+        
+        zxCollectionNum = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 20, 10)];
+        [zxCollectionNum setTextAlignment:NSTextAlignmentCenter];
+        [zxCollectionNum setFont:[UIFont systemFontOfSize:10.0f]];
+        [goodAndMessView addSubview:zxCollectionNum];
+        
+        UIImageView *messgaeImgView = [[UIImageView alloc] initWithFrame:CGRectMake(50, 0, 10, 10)];
+        [messgaeImgView setImage:LoadImage(@"zxy_message@2x", @"png")];
+        [goodAndMessView addSubview:messgaeImgView];
+        
+        zxCommentsNum = [[UILabel alloc] initWithFrame:CGRectMake(60, 0, 20, 10)];
+        [zxCommentsNum setTextAlignment:NSTextAlignmentCenter];
+        [zxCommentsNum setFont:[UIFont systemFontOfSize:10.0f]];
+        [goodAndMessView addSubview:zxCommentsNum];
     }
     return self;
 }
@@ -115,6 +137,9 @@
     }
 //    [zxStateLab setText:[infoData objectForKey:@"Stage"]];
     [zxStateLab setFrame:CGRectMake(12*ScreenWidth/320, self.cellHeight, 40*ScreenWidth/320, 13*ScreenHeight/568)];
+    [zxCollectionNum setText:[NSString stringWithFormat:@"%@",[infoData objectForKey:@"CollCount"]]];
+    [zxCommentsNum setText:[NSString stringWithFormat:@"%@",[infoData objectForKey:@"MessageCount"]]];
+    [goodAndMessView setFrame:CGRectMake(ScreenWidth-100, self.cellHeight, 100, 13*ScreenHeight/568)];
     self.cellHeight += 20*ScreenHeight/568;
     
 }
@@ -135,8 +160,9 @@
     }
     
     for (int i = 0; i<[imgNameArr count]; i++) {
-        UIImageView *pictureImgV = [[UIImageView alloc] initWithFrame:CGRectMake(i*79*ScreenWidth/320+4*ScreenWidth/320, 0, 75*ScreenHeight/568, 75*ScreenHeight/568)];
-        [pictureImgV sd_setImageWithURL:[NSURL URLWithString:[imgNameArr objectAtIndex:i]] placeholderImage:LoadImage(@"zxDiary@2x", @"jpg")];
+//        UIImageView *pictureImgV = [[UIImageView alloc] initWithFrame:CGRectMake(i*79*ScreenWidth/320+4*ScreenWidth/320, 0, 75*ScreenHeight/568, 75*ScreenHeight/568)];
+        UIImageView *pictureImgV = [[UIImageView alloc] initWithFrame:CGRectMake(i*105*ScreenWidth/320+5*ScreenWidth/320, 0, 100*ScreenHeight/568, 75*ScreenHeight/568)];
+        [pictureImgV sd_setImageWithURL:[NSURL URLWithString:[imgNameArr objectAtIndex:i]] placeholderImage:LoadImage(@"placeholder@2x", @"png")];
         [imgScrollView addSubview:pictureImgV];
     }
 }

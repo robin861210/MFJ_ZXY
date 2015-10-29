@@ -104,7 +104,7 @@
     UIButton *affirmChangeBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 200*ScreenHeight/568, ScreenWidth, 35*ScreenHeight/568)];
     [affirmChangeBtn setBackgroundColor:[UIColor whiteColor]];
     [affirmChangeBtn setTitle:@"确认修改" forState:UIControlStateNormal];
-    [affirmChangeBtn setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+    [affirmChangeBtn setTitleColor:UIColorFromHex(0x35c083) forState:UIControlStateNormal];
     affirmChangeBtn.titleLabel.font = [UIFont systemFontOfSize:13.0f];
     [affirmChangeBtn addTarget:self action:@selector(affirmChangePassWord:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:affirmChangeBtn];

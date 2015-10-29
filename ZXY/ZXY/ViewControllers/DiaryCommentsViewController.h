@@ -17,6 +17,9 @@
     NSMutableArray *diaryCommentsArray;
 
     UIView *commentsInputView ;       //评论输入
+    UITextField *commentTextF;
+    UIView *moreView;
+    BOOL isMoreViewHidder;
     
     MRProgressOverlayView *progressView;
     NetworkInterface *interface;

@@ -46,7 +46,7 @@
         [optionBtn addSubview:label];
         
         UIImageView *arrowImgView = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth-30, 7, 20, 20)];
-        [arrowImgView setBackgroundColor:[UIColor redColor]];
+//        [arrowImgView setBackgroundColor:[UIColor redColor]];
         [arrowImgView setImage:LoadImage(@"center_right@2x", @"png")];
         [optionBtn addSubview:arrowImgView];
         
@@ -86,6 +86,7 @@
     else
     {
         NSLog(@"关于我们…………");
+        [self sendGetSysParamNetWorkRequest];
     }
 }
 
@@ -166,6 +167,40 @@
     
 }
 
+//“关于我们” 请求
+- (void)sendGetSysParamNetWorkRequest
+{
+    [self showProgressView];
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    
+    [interface setInterfaceDidFinish:@selector(getSysParamNetworkResult:)];
+    [interface sendRequest:GetSysParam Parameters:postData Type:get_request];
+}
+
+- (void)getSysParamNetworkResult:(NSDictionary *)result
+{
+    NSLog(@"%@",result);
+    NSLog(@"~~~ Result :%@ ~~~",[result objectForKey:@"Code"]);
+    NSLog(@"%@",[result objectForKey:@"Msg"]);
+    
+    if ([[result objectForKey:@"Code"] integerValue] == 0) {
+        [self dismissProgressView:nil];
+        
+        WebViewController *webVC = [[WebViewController alloc] init];
+        webVC.htmlFlag = NO;
+        webVC.canShare = NO;
+        webVC.webURL = [result objectForKey:@"Response"][@"ABOUTUSURL"];
+        [self.navigationController pushViewController:webVC animated:YES];
+
+    }else {
+        NSLog(@"~~~ Error Msg :%@ ~~~",[result objectForKey:@"Msg"]);
+        [self dismissProgressView:[result objectForKey:@"Msg"]];
+    }
+}
 
 
 - (void)didReceiveMemoryWarning {

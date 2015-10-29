@@ -17,8 +17,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = @"日记详情";
     
     diaryCommentsArray = [NSMutableArray array];
+    [self addMoreFunctionBarButton];
     [self setDiaryCommentsCustomView];
 
     interface = [[NetworkInterface alloc] initWithTarget:self didFinish:@selector(getDecDiaryCommandsNetworkResult:)];
@@ -66,33 +68,93 @@
     
     [tableHeadView setFrame:CGRectMake(0, 0, ScreenWidth, lineView.frame.origin.y + lineView.frame.size.height)];
     
-    diaryCommentTableV = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStylePlain];
+    diaryCommentTableV = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight-40) style:UITableViewStylePlain];
     [diaryCommentTableV setDelegate:self];
     [diaryCommentTableV setDataSource:self];
+    [diaryCommentTableV setShowsVerticalScrollIndicator:NO];
     [diaryCommentTableV setTableHeaderView:tableHeadView];
     [diaryCommentTableV setTableFooterView:[UIView new]];
     [self.view addSubview:diaryCommentTableV];
     
+    [self setMoreFunctionCustomView];
+
     [self setCommentsOnTheInputBox];
+}
+
+//设置右导航“新建”按钮addNavigationRightItem    //分享按钮
+- (void)addMoreFunctionBarButton
+{
+    UIButton *addMoreFunBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 30)];
+    [addMoreFunBtn setBackgroundColor:[UIColor clearColor]];
+    [addMoreFunBtn setTitle:@"更多" forState:UIControlStateNormal];
+    [addMoreFunBtn setTitleColor:UIColorFromHex(0x999999) forState:UIControlStateNormal];
+    addMoreFunBtn.titleLabel.font = [UIFont systemFontOfSize:12.0f];
+    [addMoreFunBtn addTarget:self action:@selector(moreFunctionClick) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barBtItem = [[UIBarButtonItem alloc] initWithCustomView:addMoreFunBtn];
+    [self.navigationItem setRightBarButtonItem:barBtItem];
+    
+}
+
+//更多“分享”、“收藏” View
+- (void)setMoreFunctionCustomView
+{
+    moreView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth  , 80)];
+    [moreView setHidden:YES];
+    [moreView setBackgroundColor:UIColorFromHex(0xe2e2e2)];
+    [self.view addSubview:moreView];
+    
+    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [shareBtn setFrame:CGRectMake(2, 3, ScreenWidth-4, 36)];
+    [shareBtn setBackgroundColor:[UIColor whiteColor]];
+    [shareBtn setTitle:@"分享" forState:UIControlStateNormal];
+    [shareBtn setTitleColor:UIColorFromHex(0x999999) forState:UIControlStateNormal];
+    shareBtn.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+    [shareBtn addTarget:self action:@selector(shareTo:) forControlEvents:UIControlEventTouchUpInside];
+    [moreView addSubview:shareBtn];
+    
+    UIButton *collectionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [collectionBtn setFrame:CGRectMake(2, 43, ScreenWidth-4, 36)];
+    [collectionBtn setBackgroundColor:[UIColor whiteColor]];
+    [collectionBtn setTitle:@"收藏" forState:UIControlStateNormal];
+    [collectionBtn setTitleColor:UIColorFromHex(0x999999) forState:UIControlStateNormal];
+    collectionBtn.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+    [collectionBtn addTarget:self action:@selector(collectionTo:) forControlEvents:UIControlEventTouchUpInside];
+    [moreView addSubview:collectionBtn];
+    
 }
 
 //评论输入框
 - (void)setCommentsOnTheInputBox
 {
     commentsInputView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 40, self.view.frame.size.width, 40)];
-    [commentsInputView setBackgroundColor:[UIColor grayColor]];
+    [commentsInputView setBackgroundColor:UIColorFromHex(0xeaebec)];
     [self.view addSubview:commentsInputView];
     
-    UITextField *commentTextF = [[UITextField alloc] initWithFrame:CGRectMake(10*ScreenWidth/320, 5, 300*ScreenWidth/320, 30)];
+    commentTextF = [[UITextField alloc] initWithFrame:CGRectMake(10*ScreenWidth/320, 5, 240*ScreenWidth/320, 30)];
     [commentTextF setDelegate:self];
+    [commentTextF setBackgroundColor:[UIColor whiteColor]];
     [commentTextF setPlaceholder:@" 我也说两句"];
-    commentTextF.layer.borderColor = [UIColor blackColor].CGColor;
-    commentTextF.layer.borderWidth = 0.5f;
+//    commentTextF.layer.borderColor = [UIColor blackColor].CGColor;
+//    commentTextF.layer.borderWidth = 0.5f;
     commentTextF.layer.masksToBounds = YES;
     commentTextF.layer.cornerRadius = 3.0f;
     [commentsInputView addSubview:commentTextF];
+    
+    UIButton *sendCommentButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sendCommentButton setFrame:CGRectMake(260*ScreenWidth/320, 5, 50*ScreenWidth/320, 30)];
+    [sendCommentButton setBackgroundColor:[UIColor whiteColor]];
+    sendCommentButton.layer.borderColor = UIColorFromHex(0x35c083).CGColor;
+    sendCommentButton.layer.borderWidth = 0.5f;
+    sendCommentButton.layer.masksToBounds = YES;
+    sendCommentButton.layer.cornerRadius = 3.0f;
+    [sendCommentButton setTitle:@"评论" forState:UIControlStateNormal];
+    [sendCommentButton setTitleColor:UIColorFromHex(0x35c083) forState:UIControlStateNormal];
+    sendCommentButton.titleLabel.font = [UIFont systemFontOfSize:12.0f];
+    [sendCommentButton addTarget:self action:@selector(sendCommentToDiaryRequest) forControlEvents:UIControlEventTouchUpInside];
+    [commentsInputView addSubview:sendCommentButton];
 }
 
+//请求  日记评论
 - (void)sendDecDiaryCommentsRequest
 {
     [self showProgressView];
@@ -126,6 +188,68 @@
 
 }
 
+//发送评论
+- (void)sendCommentToDiaryRequest
+{
+    [commentTextF resignFirstResponder];
+    [UIView animateWithDuration:0.3 animations:^{
+        [commentsInputView setFrame:CGRectMake(0, ScreenHeight - 40 , ScreenWidth, 40)];
+    }];
+    
+    [self showProgressView];
+    NSMutableDictionary *postData = [[NSMutableDictionary alloc] init];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"UserID"] forKey:@"UserID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"ClientID"] forKey:@"ClientID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"MachineID"] forKey:@"MachineID"];
+    [postData setValue:[[[UserInfoUtils sharedUserInfoUtils] infoDic] objectForKey:@"sessionid"] forKey:@"sessionid"];
+    [postData setValue:[self.diaryDetailDic objectForKey:@"PrivateDiaryID"] forKey:@"PrivateDiaryID"];
+    [postData setValue:commentTextF.text forKey:@"Message"];
+    
+    [interface setInterfaceDidFinish:@selector(getMessageToDiaryNetworkResult:)];
+    [interface sendRequest:SubmitMessageToDiary Parameters:postData Type:get_request];
+}
+
+- (void)getMessageToDiaryNetworkResult:(NSDictionary *) result
+{
+    if ([[result objectForKey:@"Code"] intValue] == 0 &&
+        [[result objectForKey:@"Msg"] length] == 7)
+    {
+        [self dismissProgressView:nil];
+//        NSMutableArray *dataArray = [[NSMutableArray alloc] initWithArray:[FilterData filterNerworkData:[result objectForKey:@"Response"]]];
+//        NSLog(@"~~~ dataArray:%@ ~~~",dataArray);
+        [commentTextF setText:@""];
+
+        [self sendDecDiaryCommentsRequest];
+    }else {
+        NSLog(@"~~~ Error Msg :%@ ~~~",[result objectForKey:@"Msg"]);
+        [self dismissProgressView:[result objectForKey:@"Msg"]];
+    }
+    
+}
+
+#pragma mark -- 更多 按钮
+- (void)moreFunctionClick
+{
+    [moreView setHidden:isMoreViewHidder];
+    isMoreViewHidder = !isMoreViewHidder;
+}
+
+#pragma mark -- 分享按钮
+- (void)shareTo:(id)sender
+{
+    NSLog(@"分享 到 社交平台");
+    [self moreFunctionClick];
+
+}
+
+#pragma mark -- 收藏按钮
+- (void)collectionTo:(id)sender
+{
+    NSLog(@"收藏");
+    [self moreFunctionClick];
+
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -148,6 +272,7 @@
     
 }
 
+
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -158,15 +283,37 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"");
 }
 
+#pragma mark - UIScrollViewDelegate
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    [commentTextF resignFirstResponder];
+//    [UIView animateWithDuration:0.3 animations:^{
+//        [commentsInputView setFrame:CGRectMake(0, ScreenHeight - 40 , ScreenWidth, 40)];
+//    }];
+//}
 
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     [UIView animateWithDuration:0.3 animations:^{
-        [commentsInputView setFrame:CGRectMake(0, self.view.frame.size.height - 216 -80 , self.view.frame.size.width, 40)];
+        [commentsInputView setFrame:CGRectMake(0, ScreenHeight - 216 -40 , ScreenWidth, 40)];
     }];
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        [commentsInputView setFrame:CGRectMake(0, ScreenHeight - 216 - 75 , ScreenWidth, 40)];
+    }];
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     return YES;
 }
 
